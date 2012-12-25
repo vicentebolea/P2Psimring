@@ -13,7 +13,7 @@ class Query: public Packet {
 
 	public:
 		//constructor & destructor
-		Query (): Packet (query) {}
+		Query (): Packet (QUERY) {}
 		Query (const Packet&);
 		Query (const Query&);
 

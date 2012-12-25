@@ -85,17 +85,17 @@ class NetException: public Exception {
 		}
 };
 
-class LinkedListException {
-	public:
-		LinkedListException (const char* in) {
-			char tmp [1<<7], hostn [1<<7];
-			gethostname (hostn, 100);
-			snprintf (tmp, 1<<7, "LINKEDLIST [ERRNO: %i] [STR: %s] [HOSTNAME: %s]",
-				errno, strerror(errno), hostn);
-			strncat (message, tmp, 1<<7);
-		}
-
-	private:
-};
+//class LinkedListException {
+//	public:
+//		LinkedListException (const char* in) {
+//			char tmp [1<<7], hostn [1<<7];
+//			gethostname (hostn, 100);
+//			snprintf (tmp, 1<<7, "LINKEDLIST [ERRNO: %i] [STR: %s] [HOSTNAME: %s]",
+//				errno, strerror(errno), hostn);
+//			strncat (message, tmp, 1<<7);
+//		}
+//
+//	private:
+//};
 
 #endif

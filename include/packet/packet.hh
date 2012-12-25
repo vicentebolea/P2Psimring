@@ -13,11 +13,11 @@
 
 		The first byte will indicate the type of the packet, 
 		it can be:
-		- Query, see at query.{hh,cc}
-		- Update, see at update.{hh,cc}
-		- Stats, see at stats.{hh,cc}
-		- Quit
-		- Info 
+		- QUERY, see at query.{hh,cc}
+		- UPDATE, see at update.{hh,cc}
+		- STATS, see at stats.{hh,cc}
+		- QUIT
+		- INFO 
 
 		This two last types has not class defined since they
 		dont need aditional information.
@@ -27,12 +27,12 @@
 	*	the porpose of the packet
 	*/
 enum Type {
-	query  = 000, // 0000
-	update = 001, // 0001
-	stats  = 002, // 0010
-	quit   = 004, // 0100
-	info   = 010  // 1000
-} __attribute__((packed(1)));
+	QUERY  = 000, // 0000
+	UPDATE = 001, // 0001
+	STATS  = 002, // 0010
+	QUIT   = 004, // 0100
+	INFO   = 010  // 1000
+} __attribute__((packed()));
 
 /**	This Class will be inherited for each 
 	*	kind of packet

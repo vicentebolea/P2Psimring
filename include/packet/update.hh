@@ -8,7 +8,7 @@ class Update: public Packet {
 		int lower_bound, upper_bound;
 		char neighbor_ip [32];
 
-		Update(): Packet(update) {}
+		Update(): Packet (UPDATE) {}
 };
 
 #endif

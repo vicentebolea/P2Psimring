@@ -6,23 +6,34 @@
 #include <stdint.h>
 
 /*
-	*
-	*/
+ *
+ */
 struct Stat: public Packet {
-	uint32_t queryRecieves = 0, queryProcessed = 0;
-	uint64_t hitCount = 0, missCount = 0;
-	uint64_t TotalExecTime = 0, TotalWaitTime = 0;
+	uint32_t queryRecieves;
+	uint32_t queryProcessed;
+	uint64_t hitCount;
+	uint64_t missCount;
+	uint64_t TotalExecTime;
+	uint64_t TotalWaitTime;
 
-	Stat (uint32_t qr, uint32_t qp, uint64_t hc, uint64_t mc, 
-			uint64_t tet, uint64_t twt) : Packet (stats) {
+	Stat () : Packet (STATS) {}
+	Stat 
+		(
+			uint32_t queryRecieves,
+			uint32_t queryProcessed,
+			uint64_t hitCount,
+			uint64_t missCount,
+			uint64_t TotalExecTime,
+			uint64_t TotalWaitTime
+		) : Packet (STATS) {
 
-		queryRecieves = qr;									
-		queryProcessed = qp;									
-		hitCount = hc;
-		missCount = mc;
-		TotalExecTime = tet;
-		TotalWaitTime = twt;
-	}
+			this->queryRecieves  = queryRecieves;
+			this->queryProcessed = queryProcessed;	
+			this->hitCount       = hitCount;
+			this->missCount      = missCount;
+			this->TotalExecTime  = TotalExecTime;
+			this->TotalWaitTime  = TotalWaitTime;
+		}
 };
 
 #endif
