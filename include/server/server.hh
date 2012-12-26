@@ -22,18 +22,22 @@
 class Server: public sockaddr_in {
 	private:
 		char name [1024];
-		int sock;
-		Client_e address_book [NSERVERS];
+		int sock, address_book_size;
+		Client_e* address_book;
 
-		bool Recieve (int fd, void* addr, size_t size);
-		void	bind (int port, int nservers) throw (NetException);
+		bool recieve (int fd, void* addr, size_t size);
+		void	bind (int port, int nservers) throw (Exception);
 
 	public:
+		class Exception: public ::Exception {
+			public:
+				Exception (const char* in) : ::Exception(__FILE__, in) {}
+		};
+
 		Server (int port, int nservers);
 		~Server ();
 
-		void	connect () throw (NetException);
-		void	reconnect () throw (NetException);
+		void	connect () throw (Exception);
 
 		const Packet& recieve_packet (int fd);
 		bool send_packet (const Packet& p);

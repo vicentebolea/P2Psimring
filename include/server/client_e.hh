@@ -23,17 +23,9 @@ class Client_e: public sockaddr_in {
 	public:
 		class Exception: public ::Exception {
 			public:
-				Exception(const char* in) : ::Exception(in) {
-					char tmp [100], hostn[100];
-
-					gethostname (hostn, 100);
-					snprintf (tmp, 100,
-							"NETWORKING:CLIENT_E [ERRNO: %i] [STR: %s]"
-							"[REASON: %s] [HOSTNAME: %s]",
-							errno, strerror(errno), in, hostn);
-					strncat (message, tmp, 100);
-				}
+				Exception(const char* in) : ::Exception (__FILE__, in) {}
 		};
+
 		Client_e () {}
 		~Client_e () {}
 
@@ -48,7 +40,7 @@ class Client_e: public sockaddr_in {
 			return *this;
 		}
 
-		bool connect (int sock) throw (NetException) { 
+		bool connect (int sock) throw (Exception) { 
 			socklen_t ss = sizeof (struct sockaddr_in); 	
 
 			fd = accept (sock, (struct sockaddr*)this, &ss);
@@ -61,12 +53,6 @@ class Client_e: public sockaddr_in {
 		void close (int sock) {
 			::close (sock);
 		}
-
-		//	const string& toString () {
-		//		char tmp [64];	
-		//		sprintf (tmp, "FD: %i IP: %s", fd, inet_ntoa (addr.sin_addr));
-		//		return string (tmp);
-		//	}
 
 		friend ostream& operator<< (ostream& in, Client_e& c) {
 			in << "FD: " << c.fd << " IP: ";

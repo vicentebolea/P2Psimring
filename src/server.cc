@@ -1,5 +1,4 @@
 #include <server/server.hh>
-#include <iostream>
 
 using std::cout;
 using std::cerr;
@@ -7,11 +6,13 @@ using std::endl;
 
 Server::Server (int port, int nservers) {
 	try {
+		address_book = new Client_e [nservers];
+		address_book_size = nservers;
 		bind (port, nservers);
 
-	} catch (NetException& e) {
+	} catch (Exception& e) {
 		cerr << e << endl;
-		cerr << e.backTrace() << endl;
+		cerr << e.backtrace() << endl;
 		close (sock);
 		exit (EXIT_FAILURE);
 	}
@@ -19,6 +20,7 @@ Server::Server (int port, int nservers) {
 
 Server::~Server() {
 	close (sock);
+	delete address_book;
 }
 
 /* 
@@ -28,13 +30,13 @@ Server::~Server() {
 	*         of the packet and depend of the type it will
 	*         create a diferent object.
 	*/
-void Server::bind (int port, int nservers) throw (NetException) { 
+void Server::bind (int port, int nservers) throw (Exception) { 
 	const int o = 1;
 	if ((sock = socket (AF_INET, SOCK_STREAM, 0)) == -1)
-		throw NetException ("socket function");
+		throw Exception ("socket function");
 
 	if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &o, sizeof(int))==-1)
-		throw NetException ("setsockopt: SO_REUSEADDR");
+		throw Exception ("setsockopt: SO_REUSEADDR");
 
 	sin_family = AF_INET;
 	sin_port = htons (port);
@@ -42,10 +44,10 @@ void Server::bind (int port, int nservers) throw (NetException) {
 	bzero (&(sin_zero), 8);
 
 	if (::bind(sock, (struct sockaddr *)this, sizeof(struct sockaddr))==-1)
-		throw NetException ("unable to bind");
+		throw Exception ("unable to bind");
 
 	if (listen (sock, nservers) == -1)
-		throw NetException ("listen");
+		throw Exception ("listen");
 
 	gethostname (name, 1023);
 }
@@ -55,8 +57,8 @@ void Server::bind (int port, int nservers) throw (NetException) {
  * RETURN: const Packet& 
 	* SHORT:  This method will read the first byte
 	*/
-void Server::connect () throw (NetException) {
-	for (int i = 0; i < NSERVERS; i++)
+void Server::connect () throw (Exception) {
+	for (int i = 0; i < address_book_size; i++)
 		node[i].connect();
 }
 
@@ -90,26 +92,26 @@ const Packet& Server::recieve_packet (int fd) {
 	Recieve (fd, (Packet)&tmp, sizeof(Packet));
 
 	switch (tmp.type) {
-		case query:
+		case QUERY:
 			if (!recieve (fd, (Query)&tmp, sizeof(Query)-sizeof(Packet)))
-				throw NetException ("Strange Packet Type");
+				throw Exception ("Strange Packet Type");
 			break;
 
-		case stat:
+		case STATS:
 			if (!recieve (fd, (Stat)&tmp, sizeof(Stat)-sizeof(Packet)))
-				throw NetException ("Strange Packet Type");
+				throw Exception ("Strange Packet Type");
 			break;
 
-		case update:
+		case UPDATE:
 			if (!recieve (fd, (Update)&tmp, sizeof(Update)-sizeof(Packet)))
-				throw NetException ("Strange Packet Type");
+				throw Exception ("Strange Packet Type");
 			break;
 
-		case info: break;
-		case quit: break;
+		case INFO: break;
+		case QUIT: break;
 
 		default:
-			throw NetException ("Strange Packet Type");
+			throw Exception ("Strange Packet Type");
 	}
 	return tmp;
 }
@@ -124,28 +126,28 @@ const Packet& Server::recieve_packet (int fd) {
 bool Server::send_packet (const Packet& p) {
 	try {
 		switch (tmp.packet) {
-			case query:
+			case QUERY:
 				if (send (fd, &p, sizeof(Query), 0) == -1)
-					throw NetException ("problems with send");
+					throw Exception ("problems with send");
 				break;    
 
-			case stat:
+			case STATS:
 				if (send (fd, &p, sizeof(Stats), 0) == -1)
-					throw NetException ("problems with send");
+					throw Exception ("problems with send");
 				break;
 
-				case update:
+				case UPDATE:
 					if (send (fd, &p, sizeof(Update), 0) == -1)
-						throw NetException ("problems with send");
+						throw Exception ("problems with send");
 				break;
 
-			case info: break; 
-			case quit: break;
+			case INFO: break; 
+			case QUIT: break;
 
 			default:
-				throw NetException ("Strange Packet Type");
+				throw Exception ("Strange Packet Type");
 		}
-	} catch (NetException& e) {
+	} catch (Exception& e) {
 		cerr << e << endl;		
 		return false;
 	}
