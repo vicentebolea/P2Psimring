@@ -1,5 +1,5 @@
-#ifndef __SERVER_H__
-#define __SERVER_H__
+#ifndef __SERVER_HH__
+#define __SERVER_HH__
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -19,8 +19,20 @@
 #include <packet/update.hh>
 #include <server/client_e.hh>
 
+using std::ostream;
+using std::endl;
+
+/*
+ *
+	*/
 class Server: public sockaddr_in {
-	private:
+	public:
+		class Exception: public ::Exception {
+			public:
+				Exception (const char* in) : ::Exception(__FILE__, in) {}
+		};
+
+	protected:
 		char name [1024];
 		int sock, address_book_size;
 		Client_e* address_book;
@@ -29,10 +41,6 @@ class Server: public sockaddr_in {
 		void	bind (int port, int nservers) throw (Exception);
 
 	public:
-		class Exception: public ::Exception {
-			public:
-				Exception (const char* in) : ::Exception(__FILE__, in) {}
-		};
 
 		Server (int port, int nservers);
 		~Server ();
@@ -40,7 +48,14 @@ class Server: public sockaddr_in {
 		void	connect () throw (Exception);
 
 		const Packet& recieve_packet (int fd);
-		bool send_packet (const Packet& p);
+		bool send_packet (int fd, const Packet& p);
+
+		friend ostream& operator<< (ostream& in, const Server& s) {
+			in << "[Server: "<< s.name << "]";
+			in << " Sock: " << s.sock;
+			in << " Address_book size: " << s.address_book_size;
+			return in;
+		}
 };
 
 #endif

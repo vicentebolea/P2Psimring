@@ -15,7 +15,7 @@
 
 #define pot(x) 1<<(x)
 
-extern const char *__progname;
+extern char* program_invocation_short_name;
 
 using std::string;
 using std::ostream;
@@ -28,8 +28,9 @@ class Exception: public exception {
 	public:
 		Exception () {}
 
-		Exception (const char* in, const char* file) {
-			snprintf (message, 256, "EXCEPTION:%s:%s ", __progname, file);
+		Exception (const char* file, const char* in) {
+			snprintf (message, 256, "EXCEPTION:%s:%s ",
+			 program_invocation_short_name, file);
 			extra_information (in);
 		}
 
@@ -40,7 +41,7 @@ class Exception: public exception {
 		~Exception() throw() {}
 
 		Exception (const Exception& e) {
-			strncpy (message, e.message, pot(7));
+			strncpy (message, e.message, 256);
 		}
 	
 		const char* what () const throw() {

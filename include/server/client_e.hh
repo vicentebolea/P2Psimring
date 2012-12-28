@@ -17,15 +17,16 @@ using std::string;
 using std::ostream;
 
 class Client_e: public sockaddr_in {
-	private:
-		int fd;
-
 	public:
 		class Exception: public ::Exception {
 			public:
-				Exception(const char* in) : ::Exception (__FILE__, in) {}
+				Exception (const char* in) : ::Exception (__FILE__, in) {}
 		};
 
+	protected:
+		int fd;
+
+	public:
 		Client_e () {}
 		~Client_e () {}
 
@@ -54,9 +55,9 @@ class Client_e: public sockaddr_in {
 			::close (sock);
 		}
 
-		friend ostream& operator<< (ostream& in, Client_e& c) {
-			in << "FD: " << c.fd << " IP: ";
-			in << inet_ntoa (c.sin_addr) << std::endl;
+		friend ostream& operator<< (ostream& in, const Client_e& c) {
+			in << "[Client_e] FD: " << c.fd << " IP: ";
+			in << inet_ntoa (c.sin_addr);
 			return in;
 		}
 };

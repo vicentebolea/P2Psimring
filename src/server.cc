@@ -20,7 +20,7 @@ Server::Server (int port, int nservers) {
 
 Server::~Server() {
 	close (sock);
-	delete address_book;
+	delete [] address_book;
 }
 
 /* 
@@ -30,7 +30,7 @@ Server::~Server() {
 	*         of the packet and depend of the type it will
 	*         create a diferent object.
 	*/
-void Server::bind (int port, int nservers) throw (Exception) { 
+void Server::bind (int port, int nservers) throw (Server::Exception) { 
 	const int o = 1;
 	if ((sock = socket (AF_INET, SOCK_STREAM, 0)) == -1)
 		throw Exception ("socket function");
@@ -59,7 +59,7 @@ void Server::bind (int port, int nservers) throw (Exception) {
 	*/
 void Server::connect () throw (Exception) {
 	for (int i = 0; i < address_book_size; i++)
-		node[i].connect();
+		address_book [i].connect(sock);
 }
 
 /* 
@@ -73,8 +73,8 @@ bool Server::recieve (int fd, void* addr, size_t size) {
 	size_t rec_b = 0;
 
 	while (rec_b < size)
-		rec_b += recv (fd, addr + rec_b, size - rec_b, MSG_WAITALL);
-		if (rec_b	== -1)
+		rec_b += recv (fd, ((uint8_t*)addr + rec_b), size - rec_b, MSG_WAITALL);
+		if (rec_b	== (size_t)-1)
 			return false;
 
 	return true;
@@ -88,22 +88,22 @@ bool Server::recieve (int fd, void* addr, size_t size) {
 	*         create a diferent object.
 	*/
 const Packet& Server::recieve_packet (int fd) {
-	Packet tmp;
-	Recieve (fd, (Packet)&tmp, sizeof(Packet));
+	static Packet tmp (QUIT);
+	recieve (fd, &tmp, sizeof(Packet));
 
-	switch (tmp.type) {
+	switch (tmp.getType()) {
 		case QUERY:
-			if (!recieve (fd, (Query)&tmp, sizeof(Query)-sizeof(Packet)))
+			if (!recieve (fd, &tmp, sizeof(Query)-sizeof(Packet)))
 				throw Exception ("Strange Packet Type");
 			break;
 
 		case STATS:
-			if (!recieve (fd, (Stat)&tmp, sizeof(Stat)-sizeof(Packet)))
+			if (!recieve (fd, &tmp, sizeof(Stat)-sizeof(Packet)))
 				throw Exception ("Strange Packet Type");
 			break;
 
 		case UPDATE:
-			if (!recieve (fd, (Update)&tmp, sizeof(Update)-sizeof(Packet)))
+			if (!recieve (fd, &tmp, sizeof(Update)-sizeof(Packet)))
 				throw Exception ("Strange Packet Type");
 			break;
 
@@ -123,16 +123,16 @@ const Packet& Server::recieve_packet (int fd) {
 	*         of the packet and depend of the type it will
 	*         create a diferent object.
 	*/
-bool Server::send_packet (const Packet& p) {
+bool Server::send_packet (int fd, const Packet& p) {
 	try {
-		switch (tmp.packet) {
+		switch (p.getType()) {
 			case QUERY:
 				if (send (fd, &p, sizeof(Query), 0) == -1)
 					throw Exception ("problems with send");
 				break;    
 
 			case STATS:
-				if (send (fd, &p, sizeof(Stats), 0) == -1)
+				if (send (fd, &p, sizeof(Stat), 0) == -1)
 					throw Exception ("problems with send");
 				break;
 

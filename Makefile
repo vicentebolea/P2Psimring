@@ -20,5 +20,6 @@ src:
 
 clean:
 	rm $(BINDIR)/*.o
+
 dist:
 	tar -cvzf unip2p_`date +"%d-%m-%y"`.tar.gz ./*

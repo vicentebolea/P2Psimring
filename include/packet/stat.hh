@@ -1,13 +1,14 @@
 #ifndef __STAT_H_
 #define __STAT_H_
 
-#include <packet/packet.hh>
 #include <inttypes.h>
 #include <stdint.h>
 
+#include <packet/packet.hh>
+
 /*
- *
- */
+	*
+	*/
 struct Stat: public Packet {
 	uint32_t queryRecieves;
 	uint32_t queryProcessed;
@@ -34,6 +35,35 @@ struct Stat: public Packet {
 			this->TotalExecTime  = TotalExecTime;
 			this->TotalWaitTime  = TotalWaitTime;
 		}
+
+	Stat (const Stat& that) : Packet (STATS) {
+		this->queryRecieves  = that.queryRecieves;
+		this->queryProcessed = that.queryProcessed;
+		this->hitCount       = that.hitCount;
+		this->missCount      = that.missCount;
+		this->TotalExecTime  = that.TotalExecTime;
+		this->TotalWaitTime  = that.TotalWaitTime;
+	}
+
+	const Stat& operator= (const Stat& that) {
+		this->queryRecieves  = that.queryRecieves;
+		this->queryProcessed = that.queryProcessed;
+		this->hitCount       = that.hitCount;
+		this->missCount      = that.missCount;
+		this->TotalExecTime  = that.TotalExecTime;
+		this->TotalWaitTime  = that.TotalWaitTime;
+		return *this;
+	}
+
+	const Stat& operator+= (const Stat& that) {
+		this->queryRecieves  += that.queryRecieves;
+		this->queryProcessed += that.queryProcessed;
+		this->hitCount       += that.hitCount;
+		this->missCount      += that.missCount;
+		this->TotalExecTime  += that.TotalExecTime;
+		this->TotalWaitTime  += that.TotalWaitTime;
+		return *this;
+	}
 };
 
 #endif
