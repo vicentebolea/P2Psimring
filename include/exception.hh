@@ -35,7 +35,7 @@ class Exception: public exception {
 		}
 
 		Exception (const string& in) {
-			snprintf (message, 128, "EXCEPTION: %s", in.c_str());
+			snprintf (message, 128, "EXCEPTION: %s", in.c_str ());
 		}
 
 		~Exception() throw() {}
@@ -53,15 +53,15 @@ class Exception: public exception {
 
 			gethostname (hostname, 64);
 			snprintf (tmp, 128, "[ERRNO: %i] [STR: %s] [REASON: %s] [HOSTNAME: %s]",
-					errno, strerror(errno), in, hostname);
+					errno, strerror (errno), in, hostname);
 			strncat (message, tmp, 256);
 		}
 
 		const char* backtrace () const {
 			size_t size;
-			void *trace[1<<6];
-			char **strings;
-			static char bt_output [(1<<10)];
+			void* trace [1<<6];
+			char** strings;
+			static char bt_output [1<<10];
 
 			size = ::backtrace (trace, 1<<6);
 			strings = backtrace_symbols (trace, 1<<6);

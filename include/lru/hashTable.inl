@@ -66,11 +66,11 @@ bool hashTable<T>::remove (const T& d) {
 template <class T>
 uint32_t hashTable<T>::h (uint8_t* s) {
 
-	uint32_t key = 0;
+	uint32_t key = 0u;
 	key += (uint32_t) s;
-	key += (uint32_t) ((uint8_t) s[1] << 010);
-	key += (uint32_t) ((uint8_t) s[2] << 020);  
-	key += (uint32_t) ((uint8_t) s[3] << 030);  
+	key += (uint32_t) ((uint8_t) s[1] << 010u);
+	key += (uint32_t) ((uint8_t) s[2] << 020u);  
+	key += (uint32_t) ((uint8_t) s[3] << 030u);  
 	return key%size;
 }
 
