@@ -53,6 +53,7 @@
 
 #include <collection.hh>
 
+#include <list>
 #include <inttypes.h>
 #include <stdint.h>
 #include <stddef.h> //for size_t
@@ -60,6 +61,8 @@
 // Cant believe that the c++ compiler does not recognize
 // size_t, bool and another primitive types..
 // aim to make this language hard
+
+using std::list;
 
 template <class key, class value>
 class hashTable: public Collection {
@@ -74,11 +77,12 @@ protect:
 		}
 	};
 
-	Chain<entry>* buckets;
-	Chain<key> stored_keys;
+	list<entry>* buckets;
 	size_t buckets_no;
 
+	const double threshold = 1.5;
 	inline double load_factor (void) const;
+
 	inline uint32_t h (uint8_t*, size_t) const;
 	void rehash (void);
 
@@ -96,7 +100,7 @@ protect:
 template <class key, class value>
 hashTable<key, value>::hashTable () {
 	buckets_no = 128;
-	buckets = new Chain [buckets_no];
+	buckets = new list [buckets_no];
 }
 
 
@@ -125,16 +129,27 @@ inline double hashTable<key, value>::load_factor () {
 template <class key, class value>
 void hashTable<key, value>::rehash () {
 
+	size_t old_buckets_no = buckets_no;
+	queue<entry>* old_buckets = buckets;
+
 	buckets_no *= 2;
-	Chain<T>* tmp_b = new Chain [buckets_no];
+	buckets = new queue [buckets_no];
 
-	Chain::Iterator it;
-	for (it = Chain.begin(); it != Chain.end(); it++) {
-		size_t key = h (it.getValue(), buckets_no/2);
-		tmp_b->push (key, buckets [key]);
+	//For each list of entries
+	for (size_t i = 0; i < old_buckets_no; i++) {
+
+			if (!old_buckets[i]->empty()) {
+				queue<entry>::iterator it;
+				queue<entry>& b = old_buckets[i];
+
+				//Copy all the entries of the list
+				for (it = b.begin(); it != b.end(); it++) {
+					size_t new_key = h ((*it).key_n);
+					buckets [new_key].push_back (*it);
+				}
+			}
 	}
-
-	delete [] buckets;
+	delete [] old_buckets;
 	buckets = tmp_b;
 }
 
@@ -143,7 +158,10 @@ template <class key, class value>
 bool
 hashTable<key, value>::push (const key& k, const value& v) {
 
-	if (buckets[h(k)]->push(v)) {
+	if (load_factor >= threshold)
+		rehash();
+
+	if (buckets[h(k)]->push_back(v)) {
 		size++;
 		stored_keys.push(k);
 		return true;
@@ -158,7 +176,8 @@ hashTable<key, value>::push (const key& k, const value& v) {
 template <class key, class value>
 bool 
 hashTable<key, value>::remove (const key& k, const value& v) {
-	return table[h(k)].remove(v);
+	table[h(k)].remove(v);
+	return true;
 }
 
 /* Simple hash function which can represent
@@ -166,14 +185,14 @@ hashTable<key, value>::remove (const key& k, const value& v) {
 	*/
 template <class key, class value>
 	inline uint32_t
-hashTable<key,value>::h (uint8_t* s, size_t size = buckets_no)
+hashTable<key,value>::h (void* s, size_t size = buckets_no)
 {
-	uint32_t key = 0u;
-	key += (uint32_t) s;
-	key += (uint32_t) ((uint8_t) s[1] << 010u);
-	key += (uint32_t) ((uint8_t) s[2] << 020u);  
-	key += (uint32_t) ((uint8_t) s[3] << 030u);  
-	return key%size;
+	uint32_t _key = 0u;
+	_key += (uint32_t) s;
+	_key += (uint32_t) ((uint8_t) s[1] << 010u);
+	_key += (uint32_t) ((uint8_t) s[2] << 020u);  
+	_key += (uint32_t) ((uint8_t) s[3] << 030u);  
+	return _key%size;
 }
 
 #endif

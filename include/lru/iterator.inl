@@ -1,15 +1,18 @@
 #ifndef __ITERATOR_H_
 #define __ITERATOR_H_
 
-#include <element.inl>
+//#include <element.inl>
 
 template <class T>
 class Iterator {
-	private:
-		Element<T>* pointer;
+	protected:
+		T* pointer;
 
 	public:
 		Iterator (): pointer(NULL) {}
+		Iterator (const T* link) {
+				pointer = link;
+		}
 		Iterator (const Iterator& it) {
 			pointer = it.pointer;	
 		}
@@ -21,6 +24,12 @@ class Iterator {
 		T* getPointer() const {
 			return pointer;
 		}
+
+		virtual const Iterator& operator++ (int) = 0;
+		//virtual const Iterator& operator-- (int) = 0;
+		virtual const Iterator& operator++ () = 0;
+		//virtual const Iterator& operator-- () = 0;
+		virtual const Iterator& operator* () = 0;
 };
 
 #endif

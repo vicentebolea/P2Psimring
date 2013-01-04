@@ -9,7 +9,7 @@
 		 - search:     O(1 + n/k) 
 			
 	These complexities will be in the best case since the hash table
-	will may rehash sometimes and in each rehash will take O(n).
+	will may rehash sometimes and in each rehash will take O(n + buckets).
  
 	The way that im implementing this LRU is the next:
 	 
@@ -23,15 +23,52 @@
 #ifndef __LRU_INL_
 #define __LRU_INL_
 
-#include <list.inl>
+#include <collection.inl>
 #include <hashTable.inl>
-#include <chain.inl>
+#include <list>
+
+using std::list;
+
+template <class key, class value>
+class Lru: public Collection {
+
+	protect:
+		hashTable<key, bool> ht;
+		list<value> ll;
+		list<key> llk;
+
+	public:
+  Lru (size_t s) : Collection (s) {}
+	
+		void push (const key&, const value&);
+		void pop ();
+
+		bool belong (const key&);
+};
+
+template <class key, class value>
+void Lru<key, value>::push (const key& k, const value& v) {
+
+	if (ll.belong (k)) {
+		ll.push_back (value);
+		size++
+	}
+	if (size > max)
+		pop();
+}
 
 template <class T>
-class lru: public List<T> {
-	protect:
-	public:
+void Lru<key, value>::pop (const key& k) {
+	ll.pop_front();
+	key* k = llk.front()
 
-};
+	ht.remove (k); 
+	llk.pop();
+}
+
+template <class key, class value>
+bool Lru<key, value>::belong (const key& k) {
+	return ht.search (k);
+}
 
 #endif
