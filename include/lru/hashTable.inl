@@ -83,7 +83,7 @@ protect:
 	const double threshold = 1.5;
 	inline double load_factor (void) const;
 
-	inline uint32_t h (uint8_t*, size_t) const;
+	inline uint32_t h (void*, size_t) const;
 	void rehash (void);
 
 	public:
