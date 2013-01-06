@@ -54,6 +54,7 @@
 #include <collection.hh>
 
 #include <list>
+#include <algorithm>
 #include <inttypes.h>
 #include <stdint.h>
 #include <stddef.h> //for size_t
@@ -67,23 +68,37 @@ using std::list;
 template <class key, class value>
 class hashTable: public Collection {
 
-protect:
+protected:
 	struct entry {
 		key key_n;
-		entry value_n;
-		node (const key& k, const value& v) {
-			key = k;
-			value = value;
+		value value_n;
+		entry (const key& k, const value& v) {
+			key_n = k;
+			value_n = v;
+		}
+	};
+
+	struct match_key {
+		key master_key;
+		bool found;
+
+		match_key (const key& k) : master_key (k), found (false) { }
+		bool operator () (const entry& e) {
+			found = (master_key == e.key_n);
+			return (master_key == e.key_n);
+		}
+		bool is_found() {
+			return found;
 		}
 	};
 
 	list<entry>* buckets;
 	size_t buckets_no;
 
-	const double threshold = 1.5;
+	const static double threshold = 1.5;
 	inline double load_factor (void) const;
 
-	inline uint32_t h (uint8_t*, size_t) const;
+	inline uint32_t h (void*, size_t) const;
 	void rehash (void);
 
 	public:
@@ -100,20 +115,20 @@ protect:
 template <class key, class value>
 hashTable<key, value>::hashTable () {
 	buckets_no = 128;
-	buckets = new list [buckets_no];
+	buckets = new list<entry> [buckets_no];
 }
 
 
 /* */
 template <class key, class value>
 hashTable<key, value>::~hashTable () {
-	delete this->table;
+	delete[] buckets;
 }
 
 
 /* */
 template <class key, class value>
-inline double hashTable<key, value>::load_factor () {
+inline double hashTable<key, value>::load_factor () const {
 	return (double)(buckets_no/size);
 }
 
@@ -130,17 +145,17 @@ template <class key, class value>
 void hashTable<key, value>::rehash () {
 
 	size_t old_buckets_no = buckets_no;
-	queue<entry>* old_buckets = buckets;
+	list<entry>* old_buckets = buckets;
 
 	buckets_no *= 2;
-	buckets = new queue [buckets_no];
+	buckets = new list<entry> [buckets_no];
 
 	//For each list of entries
 	for (size_t i = 0; i < old_buckets_no; i++) {
 
 			if (!old_buckets[i]->empty()) {
-				queue<entry>::iterator it;
-				queue<entry>& b = old_buckets[i];
+				typename list<entry>::iterator it;
+				list<entry>& b = old_buckets[i];
 
 				//Copy all the entries of the list
 				for (it = b.begin(); it != b.end(); it++) {
@@ -150,24 +165,26 @@ void hashTable<key, value>::rehash () {
 			}
 	}
 	delete [] old_buckets;
-	buckets = tmp_b;
 }
 
 /* */
 template <class key, class value>
 bool
-hashTable<key, value>::push (const key& k, const value& v) {
+hashTable<key, value>::push (const key& _k, const value& v) {
+	void* k = (void*)&_k;
+	uint32_t key_n = h(k);
 
-	if (load_factor >= threshold)
-		rehash();
-
-	if (buckets[h(k)]->push_back(v)) {
-		size++;
-		stored_keys.push(k);
-		return true;
-
-	} else {
+	if (search(_k))
 		return false;
+
+	else {
+		buckets[key_n]->push_back (_k,v);
+		size++;
+
+		if (load_factor >= threshold)
+			rehash();
+
+		return true;
 	}
 }
 
@@ -175,9 +192,21 @@ hashTable<key, value>::push (const key& k, const value& v) {
 /* */
 template <class key, class value>
 bool 
-hashTable<key, value>::remove (const key& k, const value& v) {
-	table[h(k)].remove(v);
+hashTable<key, value>::remove (const key& k) {
+	list<entry>& target = buckets[h(k)];
+	target.remove_if (target.begin(),
+	                  target.end(), 
+										  							match_key (k));
 	return true;
+}
+
+template <class key, class value>
+bool 
+hashTable<key, value>::search (const key& k) {
+	list<entry>& target = buckets[h(k)];
+	return for_each (target.begin(),
+	                 target.end(), 
+																		match_key (k)).is_found();
 }
 
 /* Simple hash function which can represent
@@ -185,14 +214,16 @@ hashTable<key, value>::remove (const key& k, const value& v) {
 	*/
 template <class key, class value>
 	inline uint32_t
-hashTable<key,value>::h (void* s, size_t size = buckets_no)
+hashTable<key,value>::h (void* _s, size_t _size = 0) const
 {
+	if (_size == 0) _size = buckets_no;
+	uint8_t* s = _s;
 	uint32_t _key = 0u;
 	_key += (uint32_t) s;
 	_key += (uint32_t) ((uint8_t) s[1] << 010u);
 	_key += (uint32_t) ((uint8_t) s[2] << 020u);  
 	_key += (uint32_t) ((uint8_t) s[3] << 030u);  
-	return _key%size;
+	return _key%_size;
 }
 
 #endif

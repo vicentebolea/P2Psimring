@@ -10,7 +10,7 @@
 
 //template <class T>
 class Collection {
-	protect:
+	protected:
 		size_t size;
 
 	public:
