@@ -6,13 +6,15 @@
 	* This is the implementation of a hash table
 	* this hash table uses a linked list to prevent
 	* colisions this is chained hash table.
- *
- * Also to keep a good load factor the hash table
+	*
+	* Also to keep a good load factor the hash table
 	* will be resize whenever the load factor is over
 	* 150%.
-	* For this matter I use another linkedlist to
+	* Nevertheless I am not rehashing to reduce the size
+ *
+	* For this matter I wonder to use another linkedlist to
 	* keep track of all the keys stores, then I can iterate
-	* Over the table.
+	* over the table.
 	* 
 	* For now I am using a simple hash function which
 	* just break the four first bytes of the key 
@@ -68,53 +70,54 @@ using std::list;
 template <class key, class value>
 class hashTable: public Collection {
 
-protected:
-	struct entry {
-		key key_n;
-		value value_n;
-		entry (const key& k, const value& v) {
-			key_n = k;
-			value_n = v;
-		}
-	};
+	protected:
+		struct entry {
+			key key_n;
+			value value_n;
+			entry (const key& k, const value& v) {
+				key_n = k;
+				value_n = v;
+			}
+		};
 
-	struct match_key {
-		key master_key;
-		bool found;
+		// Functor to search a key in a given list	
+		struct match_key {
+			key master_key;
+			bool found;
 
-		match_key (const key& k) : master_key (k), found (false) { }
-		bool operator () (const entry& e) {
-			found = (master_key == e.key_n);
-			return (master_key == e.key_n);
-		}
-		bool is_found() {
-			return found;
-		}
-	};
+			match_key (const key& k) : master_key(k), found(false) {}
+			bool operator () (const entry& e) {
+				found = (master_key == e.key_n);
+				return (master_key == e.key_n);
+			}
 
-	list<entry>* buckets;
-	size_t buckets_no;
+			bool is_found() { return found; }
+		};
 
-	const static double threshold = 1.5;
-	inline double load_factor (void) const;
+		list<entry>* buckets;
+		size_t buckets_no;
 
-	inline uint32_t h (void*, size_t) const;
-	void rehash (void);
+		const static double threshold = 1.5;
+		inline double over_threshold (void) const;
+
+		inline uint32_t h (const key&, size_t) const;
+		void rehash (void);
 
 	public:
-	hashTable ();
-	~hashTable ();
+		hashTable (size_t);
+		~hashTable ();
 
-	bool push (const key&, const value&);
-	bool remove (const key&);
-	bool search (const key&);
+		bool push (const key&, const value&);
+		void remove (const key&);
+		bool search (const key&);
+		const value& get (const key&);
 };
 
 
 /* */
 template <class key, class value>
-hashTable<key, value>::hashTable () {
-	buckets_no = 128;
+hashTable<key, value>::hashTable (size_t _size = 128) {
+	buckets_no = _size;
 	buckets = new list<entry> [buckets_no];
 }
 
@@ -126,10 +129,14 @@ hashTable<key, value>::~hashTable () {
 }
 
 
+/************************************************/
+/* PRIVATE METHODS FOR REHASHING                */
+/************************************************/
+
 /* */
 template <class key, class value>
-inline double hashTable<key, value>::load_factor () const {
-	return (double)(buckets_no/size);
+inline double hashTable<key, value>::over_threshold () const {
+	return (double)(buckets_no/size) >= threshold;
 }
 
 
@@ -144,8 +151,8 @@ inline double hashTable<key, value>::load_factor () const {
 template <class key, class value>
 void hashTable<key, value>::rehash () {
 
-	size_t old_buckets_no = buckets_no;
-	list<entry>* old_buckets = buckets;
+	list<entry>* old_buckets    = buckets;
+	size_t       old_buckets_no = buckets_no;
 
 	buckets_no *= 2;
 	buckets = new list<entry> [buckets_no];
@@ -153,77 +160,87 @@ void hashTable<key, value>::rehash () {
 	//For each list of entries
 	for (size_t i = 0; i < old_buckets_no; i++) {
 
-			if (!old_buckets[i]->empty()) {
-				typename list<entry>::iterator it;
-				list<entry>& b = old_buckets[i];
+		if (!old_buckets[i].empty()) {
+			typename list<entry>::iterator it;
+			list<entry>& b = old_buckets[i];
 
-				//Copy all the entries of the list
-				for (it = b.begin(); it != b.end(); it++) {
-					size_t new_key = h ((*it).key_n);
-					buckets [new_key].push_back (*it);
-				}
+			//Copy all the entries of the list
+			for (it = b.begin(); it != b.end(); it++) {
+				size_t new_key = h ((*it).key_n);
+				buckets [new_key].push_back (*it);
 			}
+		}
 	}
 	delete [] old_buckets;
 }
 
+/************************************************/
+/*       PUBLIC METHODS                         */
+/************************************************/
+
 /* */
 template <class key, class value>
 bool
-hashTable<key, value>::push (const key& _k, const value& v) {
-	void* k = (void*)&_k;
+hashTable<key, value>::push (const key& k, const value& v) {
 	uint32_t key_n = h(k);
 
-	if (search(_k))
+	if (search (k))
 		return false;
 
 	else {
-		buckets[key_n]->push_back (_k,v);
+		buckets[key_n].push_back (entry(k,v));
 		size++;
 
-		if (load_factor >= threshold)
-			rehash();
-
+		if (over_threshold()) rehash();
 		return true;
 	}
 }
 
-
-/* */
+/**
+	*
+	*/
 template <class key, class value>
-bool 
+void
 hashTable<key, value>::remove (const key& k) {
-	list<entry>& target = buckets[h(k)];
-	target.remove_if (target.begin(),
-	                  target.end(), 
-										  							match_key (k));
-	return true;
+	buckets [h(k)].remove_if (match_key(k));
 }
 
+/**
+	*
+	*/
+template <class key, class value>
+const value& hashTable<key, value>::get (const key& k) {
+	list<entry>& l = buckets[h(k)];
+	return (*find_if (l.begin(), l.end(), match_key(k))).value_n;
+}
+
+/**
+	*
+	*/
 template <class key, class value>
 bool 
 hashTable<key, value>::search (const key& k) {
-	list<entry>& target = buckets[h(k)];
-	return for_each (target.begin(),
-	                 target.end(), 
-																		match_key (k)).is_found();
+	list<entry>& t = buckets [h(k)];
+	return find_if(t.begin(), t.end(), match_key(k)) != t.end();
 }
 
-/* Simple hash function which can represent
+
+/** Simple hash function which can represent
 	* less than 32 bits number, It uses modulo.
 	*/
 template <class key, class value>
-	inline uint32_t
-hashTable<key,value>::h (void* _s, size_t _size = 0) const
+inline uint32_t
+hashTable<key, value>::h (const key& k, size_t length = 0) const
 {
-	if (_size == 0) _size = buckets_no;
-	uint8_t* s = _s;
-	uint32_t _key = 0u;
-	_key += (uint32_t) s;
-	_key += (uint32_t) ((uint8_t) s[1] << 010u);
-	_key += (uint32_t) ((uint8_t) s[2] << 020u);  
-	_key += (uint32_t) ((uint8_t) s[3] << 030u);  
-	return _key%_size;
+	if (!length) length = buckets_no;
+
+	uint8_t* seed = (uint8_t*) &k;
+	uint32_t _key = 0;
+
+	for (size_t i = 0; i < sizeof(key) % 5; i++)
+		_key += (uint32_t) (seed[i] << (0x8 * i));
+
+	return _key % length;
 }
 
 #endif
