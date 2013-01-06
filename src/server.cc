@@ -35,7 +35,7 @@ void Server::bind (int port, int nservers) throw (Server::Exception) {
 	if ((sock = socket (AF_INET, SOCK_STREAM, 0)) == -1)
 		throw Exception ("socket function");
 
-	if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &o, sizeof(int))==-1)
+	if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &o, sizeof int)==-1)
 		throw Exception ("setsockopt: SO_REUSEADDR");
 
 	sin_family = AF_INET;
@@ -43,7 +43,7 @@ void Server::bind (int port, int nservers) throw (Server::Exception) {
 	sin_addr.s_addr = INADDR_ANY;
 	bzero (&(sin_zero), 8);
 
-	if (::bind(sock, (struct sockaddr *)this, sizeof(struct sockaddr))==-1)
+	if (::bind (sock, (struct sockaddr *)this, sizeof struct sockaddr)==-1)
 		throw Exception ("unable to bind");
 
 	if (listen (sock, nservers) == -1)

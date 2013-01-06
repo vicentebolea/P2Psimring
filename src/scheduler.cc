@@ -16,8 +16,8 @@ Scheduler::Scheduler (int argc, char** argv) {
 		else
 			read_ini.open (opt.config_path);
 
-		scheduler_port = read_ini.get_value_of ("scheduler", "scheduler_port");
-		number_nodes = read_ini.get_value_of ("scheduler", "number_nodes");
+		opt.scheduler_port = read_ini.get_value_of ("scheduler", "scheduler_port");
+		opt.number_nodes = read_ini.get_value_of ("scheduler", "number_nodes");
 
 		read_init.close ();
 	}
@@ -44,7 +44,7 @@ bool Scheduler::get_args (int argc, char** argv) {
 				break;
 
 			case 'f': /* Ini config file path */
-			 config_path = strncpy (opt.config_path, optarg, 128);
+			 opt.config_path = strncpy (opt.config_path, optarg, 128);
 				opt.config_file = true;
 				break;
 
@@ -52,7 +52,7 @@ bool Scheduler::get_args (int argc, char** argv) {
 			 need_help = true;
 				break;
 
-			defaul: 
+			default: 
 				opt.config_file = true;
 				opt.not_config_file = true;
 				break;

@@ -33,37 +33,44 @@ template <class key, class value>
 class Lru: public Collection {
 
 	protect:
-		hashTable<key, bool> ht;
-		list<value> ll;
-		list<key> llk;
+		struct entry {
+			key key_n;
+			value val_n;
+			entry (const key& k, const value& v) key_n(k), val_n(v) {}
+		};
+
+	 size_t max;
+		hashTable<key, list<value>::iterator> ht;
+		list<entry> ll;
 
 	public:
-  Lru (size_t s) : Collection (s) {}
+  Lru (size_t _max) max (_max) {}
 	
 		void push (const key&, const value&);
 		void pop ();
 
 		bool belong (const key&);
+
 };
 
 template <class key, class value>
 void Lru<key, value>::push (const key& k, const value& v) {
 
-	if (ll.belong (k)) {
-		ll.push_back (value);
+	if (!belong (k)) {
+		ll.push_back (k, v);
+		ht.push (k, ll.end());
 		size++
 	}
-	if (size > max)
-		pop();
+
+	if (size > max) pop();
 }
 
-template <class T>
+template <class key, class value>
 void Lru<key, value>::pop (const key& k) {
-	ll.pop_front();
-	key* k = llk.front()
 
-	ht.remove (k); 
-	llk.pop();
+	list<value>::iterator it = ll.begin();
+	ht.remove ((*it).key);
+	ll.pop_front();
 }
 
 template <class key, class value>

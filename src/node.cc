@@ -18,8 +18,7 @@ Node::~Node() {
 }
 
 bool Node::init() {
-		scheduler.connect();
-
+	scheduler.connect();
 }
 
 bool Node::process() {
@@ -37,17 +36,17 @@ bool Node::process() {
 //ToDo
 void Node::tneighborFunction(void *args) {}
 
-void Node::tschedulerFunction(void *args) {
+void Node::tschedulerFunction (void *args) {
 
 
 
 }
 
-void Node::tworkerFunction(void *args) {
+void Node::tworkerFunction (void *args) {
 
 	uint64_t* hitmiss_count[2] = {&hitCount, &missCount};
 
-	while(die_thread != true || Queue.empty() != true) {
+	while (die_thread != true || Queue.empty() != true) {
 		while (Queue.empty() && die_thread != true) 
 			pthread_mutex_lock (&empty);
 		if (die_thread == true)
@@ -56,29 +55,29 @@ void Node::tworkerFunction(void *args) {
 		Query* query = buffer_local.front();
 
 		if (processQuery(query) == false) {
-				buffer_neighbor.push(query);
-				buffer_local.pop();
+			buffer_neighbor.push(query);
+			buffer_local.pop();
 
 		} else {
-				buffer_local.pop();
-				delete query;
+			buffer_local.pop();
+			delete query;
 		}
 	}
 	pthread_exit (EXIT_SUCCESS);
 }
 
 bool Node::processQuery(Query* query) {
-		assert (query != NULL);
+	assert (query != NULL);
 
-		bool result;
-		query->setStartDate();
-		result = setCache.match (static_cast<packet*> (query), hitmiss_count);
-		query->setFinishedDate();
+	bool result;
+	query->setStartDate();
+	result = setCache.match (static_cast<packet*> (query), hitmiss_count);
+	query->setFinishedDate();
 
-		queryProcessed++;
-		TotalExecTime += query->getExecTime();
-		TotalWaitTime += query->getWaitTime();
-		return result;
+	queryProcessed++;
+	TotalExecTime += query->getExecTime();
+	TotalWaitTime += query->getWaitTime();
+	return result;
 }
 
 int main (int argc, char** argv) {
