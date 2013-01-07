@@ -61,10 +61,6 @@
 #include <stdint.h>
 #include <stddef.h> //for size_t
 
-// Cant believe that the c++ compiler does not recognize
-// size_t, bool and another primitive types..
-// aim to make this language hard
-
 using std::list;
 
 template <class key, class value>

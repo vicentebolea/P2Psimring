@@ -8,21 +8,16 @@
 
 #include <stddef.h>
 
-//template <class T>
 class Collection {
 	protected:
 		size_t size;
 
 	public:
-		Collection /*<T>*/ () : size(0) {}
+		Collection () : size(0) {}
+		virtual ~Collection () {}
 
-		inline size_t getSize () const {
-			return size;
-		}
-
-		inline bool empty () const {
-			return size ? true: false;
-		}
+		inline size_t getSize () const { return size; }
+		inline bool empty () const { return size ? true: false; }
 };
 
 #endif
