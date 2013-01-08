@@ -57,14 +57,26 @@
 
 #include <list>
 #include <algorithm>
+#include <stdexcept>
 #include <inttypes.h>
 #include <stdint.h>
 #include <stddef.h> //for size_t
+#include <assert.h> //for size_t
 
 using std::list;
+using std::out_of_range;
 
 template <class key, class value>
 class hashTable: public Collection {
+
+	public:
+		hashTable (size_t);
+		~hashTable ();
+
+		bool push (const key&, const value&);
+		void remove (const key&);
+		bool search (const key&);
+		const value& at (const key&) throw (out_of_range);
 
 	protected:
 		struct entry {
@@ -98,21 +110,13 @@ class hashTable: public Collection {
 
 		inline uint32_t h (const key&, size_t) const;
 		void rehash (void);
-
-	public:
-		hashTable (size_t);
-		~hashTable ();
-
-		bool push (const key&, const value&);
-		void remove (const key&);
-		bool search (const key&);
-		const value& get (const key&);
 };
 
 
 /* */
 template <class key, class value>
 hashTable<key, value>::hashTable (size_t _size = 128) {
+	assert (size == 0);
 	buckets_no = _size;
 	buckets = new list<entry> [buckets_no];
 }
@@ -132,7 +136,7 @@ hashTable<key, value>::~hashTable () {
 /* */
 template <class key, class value>
 inline double hashTable<key, value>::over_threshold () const {
-	return (double)(buckets_no/size) >= threshold;
+	return (double)(size/buckets_no) >= threshold;
 }
 
 
@@ -188,6 +192,7 @@ hashTable<key, value>::push (const key& k, const value& v) {
 		size++;
 
 		if (over_threshold()) rehash();
+
 		return true;
 	}
 }
@@ -205,9 +210,17 @@ hashTable<key, value>::remove (const key& k) {
 	*
 	*/
 template <class key, class value>
-const value& hashTable<key, value>::get (const key& k) {
+const value&
+hashTable<key, value>::at (const key& k) throw (out_of_range)
+{
 	list<entry>& l = buckets[h(k)];
-	return (*find_if (l.begin(), l.end(), match_key(k))).value_n;
+	typename list<entry>::iterator it;
+
+	it = find_if (l.begin(), l.end(), match_key(k));
+	if (it == l.end())
+		throw out_of_range ("Doesnt belong");
+	else
+		return (*it).value_n;
 }
 
 /**
@@ -228,10 +241,10 @@ template <class key, class value>
 inline uint32_t
 hashTable<key, value>::h (const key& k, size_t length = 0) const
 {
-	if (!length) length = buckets_no;
-
 	uint8_t* seed = (uint8_t*) &k;
 	uint32_t _key = 0;
+
+	if (!length) length = buckets_no;
 
 	for (size_t i = 0; i < sizeof(key) % 5; i++)
 		_key += (uint32_t) (seed[i] << (0x8 * i));
