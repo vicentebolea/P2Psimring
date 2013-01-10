@@ -73,6 +73,7 @@
 #include <stddef.h>
 #include <assert.h> 
 
+using std::pair; // :TODO: change entry to pair
 using std::list;
 using std::out_of_range;
 
@@ -89,29 +90,34 @@ class hashTable: public Collection {
   const value& at (const key&) throw (out_of_range);
 
  protected:
+  //Inner classes
   struct entry {
    key key_n;
    value value_n;
+
    entry (const key& k, const value& v) {
     key_n = k;
     value_n = v;
+   }
+
+   entry (const entry& e) {
+    key_n = e.key_n;
+    value_n = e.value_n;
    }
   };
 
   // Functor to search a key in a given list
   struct match_key {
    key master_key;
-   bool found;
 
-   match_key (const key& k) : master_key(k), found(false) {}
+   match_key (const key& k) : master_key(k) {}
+
    bool operator () (const entry& e) {
-    found = (master_key == e.key_n);
     return (master_key == e.key_n);
    }
-
-   bool is_found() { return found; }
   };
 
+  // Attributes
   list<entry>* buckets;
   size_t buckets_no;
 

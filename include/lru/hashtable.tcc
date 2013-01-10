@@ -19,7 +19,7 @@
  */
 template <class key, class value>
 hashTable<key, value>::hashTable (size_t _size = 128) {
- assert (size == 0);
+ assert (_size != 0);
  buckets_no = _size;
  buckets = new list<entry> [buckets_no];
 }

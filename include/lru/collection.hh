@@ -17,7 +17,7 @@ class Collection {
   virtual ~Collection () {}
 
   inline size_t getSize () const { return size; }
-  inline bool empty () const { return size ? true: false; }
+  inline bool empty () const { return size == 0 ? true: false; }
 };
 
 #endif

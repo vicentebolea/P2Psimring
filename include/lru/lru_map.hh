@@ -10,14 +10,14 @@
  *
  * @section DESCRIPTION
  *
- * This is just a sketch for the LRU class 
+ * This is just a sketch for the LRU map class 
  * I am wondering to use a hash table + doubly linked list
  * Since for the three operations that im using i 
  * have theses complexities:
  *
- *  - push_front: O(1)
- *  - pop_back:   O(1)
- *  - search:     O(1 + n/k) 
+ *  - insert:   O(1)
+ *  - lookup:   O(1)
+ *  - pop:      O(1) 
  *
  * These complexities will be in the best case since 
  * the hash table will may rehash sometimes and in each 
@@ -36,36 +36,40 @@
 #ifndef __LRU_MAP_HH_
 #define __LRU_MAP_HH_
 
-#include <collection.inl>
+#include <collection.hh>
 #include <hashtable.hh>
+
+#include <stdexcept>
+#include <algorithm>
 #include <list>
 
+using std::pair;
 using std::list;
+using std::out_of_range;
 
+/** --------------------------------------------------------
+ * @class lru_map <lru_map.hh>
+ * @see hashtable <hashtable.hh>
+ */
 template <class key, class value>
-class Lru: public Collection {
+class lru_map: public Collection {
 
  public:
-  Lru (size_t _max) : max (_max) {}
+  lru_map (size_t _max) : max (_max) {}
 
-  void push (const key&);
-  void pop ();
+  void insert (const key&, const value&);
+  const value& lookup (const key&) throw (out_of_range);
+  void pop (void);
+  const value& front (void);
 
-  bool find (const key&);
+ protected:
+  void update (const key&, const value&) throw (out_of_range);
 
-
-protect:
-  struct entry {
-   key key_n;
-   value val_n;
-   entry (const key& k, const value& v) : 
-    key_n(k), val_n(v) {}
-  };
-
+ protected:
   size_t max;
-  hashTable<key, list<value>::iterator> ht;
-  list<entry> ll;
 
+  list<pair<key, value> > ll;
+  hashTable<key, typename list<value>::iterator> ht;
 };
 
 #include <lru_map.tcc>
