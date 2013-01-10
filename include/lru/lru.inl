@@ -18,6 +18,7 @@
 	*		- The hash table given a key (wish in this experiment will be 
 	*	   a set of number) will store pointers to each node of the LL. 
 	*
+	* The input should consist in a key and value
 	*/
 
 #ifndef __LRU_INL_
@@ -29,7 +30,7 @@
 
 using std::list;
 
-template <class key>
+template <class key, class value>
 class Lru: public Collection {
 	public:
 		Lru (size_t _max) max (_max) {}
