@@ -6,7 +6,7 @@
 #include <limits.h>
 #include <limits>
 #include <inttypes.h>
-#include <hashTable.inl>
+#include <hashtable.hh>
 
 using namespace std;
 
