@@ -41,10 +41,10 @@ hashTable<key, value>::~hashTable () {
  */
 template <class key, class value>
 bool
-hashTable<key, value>::push (const key& k, const value& v) {
+hashTable<key, value>::insert (const key& k, const value& v) {
  uint32_t key_n = h(k);
 
- if (search (k))
+ if (find (k))
   return false;
 
  else {
@@ -65,6 +65,7 @@ template <class key, class value>
 void
 hashTable<key, value>::remove (const key& k) {
  buckets [h(k)].remove_if (match_key(k));
+ size--;
 }
 
 
@@ -76,8 +77,9 @@ hashTable<key, value>::remove (const key& k) {
  *         key
  */
 template <class key, class value>
- const value&
-hashTable<key, value>::at (const key& k) throw (out_of_range)
+const value&
+hashTable<key, value>::lookup (const key& k)
+throw (out_of_range)
 {
  list<entry>& l = buckets[h(k)];
  typename list<entry>::iterator it;
@@ -96,7 +98,7 @@ hashTable<key, value>::at (const key& k) throw (out_of_range)
  */
 template <class key, class value>
 bool 
-hashTable<key, value>::search (const key& k) {
+hashTable<key, value>::find (const key& k) {
  list<entry>& t = buckets [h(k)];
  return find_if(t.begin(), t.end(), match_key(k)) != t.end();
 }

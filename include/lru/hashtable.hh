@@ -84,10 +84,10 @@ class hashTable: public Collection {
   hashTable (size_t);
   ~hashTable ();
 
-  bool push (const key&, const value&);
+  bool insert (const key&, const value&);
   void remove (const key&);
-  bool search (const key&);
-  const value& at (const key&) throw (out_of_range);
+  bool find (const key&);
+  const value& lookup (const key&) throw (out_of_range);
 
  protected:
   //Inner classes
