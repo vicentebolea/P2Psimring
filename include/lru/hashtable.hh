@@ -79,7 +79,7 @@ using std::out_of_range;
 
 template <class key, class value>
 class hashTable: public Collection {
-
+ typedef pair<key, value> entry;
  public:
   hashTable (size_t);
   ~hashTable ();
@@ -90,30 +90,13 @@ class hashTable: public Collection {
   const value& lookup (const key&) throw (out_of_range);
 
  protected:
-  //Inner classes
-  struct entry {
-   key key_n;
-   value value_n;
-
-   entry (const key& k, const value& v) {
-    key_n = k;
-    value_n = v;
-   }
-
-   entry (const entry& e) {
-    key_n = e.key_n;
-    value_n = e.value_n;
-   }
-  };
-
   // Functor to search a key in a given list
   struct match_key {
    key master_key;
 
    match_key (const key& k) : master_key(k) {}
-
    bool operator () (const entry& e) {
-    return (master_key == e.key_n);
+    return (master_key == e.first);
    }
   };
 

@@ -48,7 +48,7 @@ hashTable<key, value>::insert (const key& k, const value& v) {
   return false;
 
  else {
-  buckets[key_n].push_back (entry(k,v));
+  buckets[key_n].push_back (entry(k, v));
   size++;
 
   if (over_threshold()) rehash();
@@ -64,8 +64,8 @@ hashTable<key, value>::insert (const key& k, const value& v) {
 template <class key, class value>
 void
 hashTable<key, value>::remove (const key& k) {
+	if (find (k)) size--;
  buckets [h(k)].remove_if (match_key(k));
- size--;
 }
 
 
@@ -88,7 +88,7 @@ throw (out_of_range)
  if (it == l.end())
   throw out_of_range ("Doesnt belong");
  else
-  return (*it).value_n;
+  return (*it).second;
 }
 
 
@@ -145,7 +145,7 @@ void hashTable<key, value>::rehash () {
 
    //Copy all the entries of the list
    for (it = b.begin(); it != b.end(); it++) {
-    size_t new_key = h ((*it).key_n);
+    size_t new_key = h ((*it).first);
     buckets [new_key].push_back (*it);
    }
   }
