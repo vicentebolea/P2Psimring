@@ -1,10 +1,19 @@
-INCLUDE := ./../../include/lru/
+INCLUDE := -I./../../include/lru/
+INCLUDE += -I./../../lib
 
 CXX := g++
-CXXFLAGS := -g -Wall -I$(INCLUDE)
+CXXFLAGS := -g -Wall $(INCLUDE)
+LDFLAGS := -L./../../lib -lUnitTest++
 
-chain_test: chain_test.cc
-	$(CXX) $(CXXFLAGS) -o ./$@ $^
+all:
+
+hashtable: hashtable_test.cc
+	$(CXX) -c $(CXXFLAGS) $^
+	$(CXX) -o ./$@ hashtable_test.o $(LDFLAGS)
+
+lru_map: lru_map_test.cc
+	$(CXX) -c $(CXXFLAGS) $^
+	$(CXX) -o ./$ lru_map_test.o $(LDFLAGS)
 
 clean:						
 	rm chain_test

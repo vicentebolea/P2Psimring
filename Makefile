@@ -18,6 +18,9 @@ build: packet lru
 src:
 	$(MAKE) -C $(SRCDIR)
 
+lib: 
+	$(MAKE) -C ./lib 
+
 clean:
 	rm $(BINDIR)/*.o
 
