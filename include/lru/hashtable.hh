@@ -1,12 +1,12 @@
-/** -------------------------------------------------------
+
+/** ***************************************************//**
+ * @class  hashTable
+ * @brief  Template header for hashtable ADT
  * @author Vicente Adolfo Bolea Sanchez
- *         <vicente.bolea@gmail.com>,
+ *         <vicente.bolea@gmail.com>
  *         <vicente@unist.ac.kr>
  *
- * @file   hashtable.hh
- * @brief  Template header for hashtable ADT
- ** -------------------------------------------------------
- *
+ ***********************************************************
  * @section DESCRIPTION
  *
  * This is the implementation of a hash table
@@ -25,7 +25,7 @@
  * For now I am using a simple hash function which
  * just break the four first bytes of the key 
  * and apply mod with the bucket's table length.
- *
+ * @verbatim
  * Hash function 32 bits:
  * 
  * 00000000 00000000 00000000 XXXXXXXX
@@ -53,7 +53,7 @@
  *        |        +------+--------+-------------+
  *        +------->| KEY5 | VALUE5 |link to entry|
  *                 +------+--------+-------------+
- *
+ * @endverbatim
  */
 
 #ifndef __HASHTABLE_HH_
@@ -73,7 +73,7 @@
 #include <stddef.h>
 #include <assert.h> 
 
-using std::pair; // :TODO: change entry to pair
+using std::pair;
 using std::list;
 using std::out_of_range;
 

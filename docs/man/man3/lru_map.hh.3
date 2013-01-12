@@ -1,17 +1,17 @@
-.TH "/home/vicente/Documents/developing/unip2p/include/lru/lru_map.hh" 3 "Sat Jan 12 2013" "p2p-distrubuted" \" -*- nroff -*-
+.TH "/home/vicente/Documents/desarrollo/p2p_distributed/include/lru/lru_map.hh" 3 "Sat Jan 12 2013" "p2p-distrubuted" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/vicente/Documents/developing/unip2p/include/lru/lru_map.hh \- 
+/home/vicente/Documents/desarrollo/p2p_distributed/include/lru/lru_map.hh \- 
 .PP
-abstract class for dictionary ADT  
+abstract class for dictionary ADT -------------------------------------------------------  
 
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <collection\&.hh>\fP
+\fC#include <collection.hh>\fP
 .br
-\fC#include <hashtable\&.hh>\fP
+\fC#include <hashtable.hh>\fP
 .br
 \fC#include <stdexcept>\fP
 .br
@@ -19,7 +19,7 @@ abstract class for dictionary ADT
 .br
 \fC#include <list>\fP
 .br
-\fC#include <lru_map\&.tcc>\fP
+\fC#include <lru_map.tcc>\fP
 .br
 
 .SS "Classes"
@@ -31,9 +31,9 @@ abstract class for dictionary ADT
 .in -1c
 .SH "Detailed Description"
 .PP 
-abstract class for dictionary ADT 
+abstract class for dictionary ADT ------------------------------------------------------- 
 
-Template header for \fBlru_map\fP ADT\&.
+Template header for \fBlru_map\fP ADT -------------------------------------------------------.
 .PP
 ------------------------------------------------------- 
 .PP
@@ -42,8 +42,6 @@ Template header for \fBlru_map\fP ADT\&.
 Vicente Adolfo Bolea Sanchez <vicente.bolea@gmail.com>, <vicente@unist.ac.kr>
 .RE
 .PP
--------------------------------------------------------
-.PP
 ------------------------------------------------------- 
 .PP
 \fBAuthor:\fP
@@ -51,7 +49,6 @@ Vicente Adolfo Bolea Sanchez <vicente.bolea@gmail.com>, <vicente@unist.ac.kr>
 Vicente Adolfo Bolea Sanchez <vicente.bolea@gmail.com>, <vicente@unist.ac.kr>
 .RE
 .PP
--------------------------------------------------------
 .SH "DESCRIPTION"
 .PP
 This is just a sketch for the LRU map class I am wondering to use a hash table + doubly linked list Since for the three operations that im using i have theses complexities:
@@ -64,18 +61,18 @@ lookup: O(1)
 pop: O(1)
 .PP
 .PP
-These complexities will be in the best case since the hash table will may rehash sometimes and in each rehash will take O(n + buckets)\&.
+These complexities will be in the best case since the hash table will may rehash sometimes and in each rehash will take O(n + buckets).
 .PP
 The way that im implementing this LRU is the next:
 .PP
 .IP "\(bu" 2
-The LL will just store the diskpage\&.
+The LL will just store the diskpage.
 .PP
 .PP
 .IP "\(bu" 2
-The hash table given a key (wish in this experiment will be a set of number) will store pointers to each node of the LL\&. 
+The hash table given a key (wish in this experiment will be a set of number) will store pointers to each node of the LL. 
 .PP
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for p2p-distrubuted from the source code\&.
+Generated automatically by Doxygen for p2p-distrubuted from the source code.

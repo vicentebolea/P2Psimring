@@ -23,7 +23,7 @@ SUITE (lru_map_basic) {
 
  // -------------------------------------------------------
 	TEST_FIXTURE (lmfixture, insert) {
-		CHECK_EQUAL (lm.getSize(), 100);
+		CHECK_EQUAL (lm.getSize(), (size_t)100);
 	}
 
  // -------------------------------------------------------
@@ -38,7 +38,7 @@ SUITE (lru_map_basic) {
   for (int i = 0; i < 20; i++)
 			lm.pop();
   
-		CHECK_EQUAL (lm.getSize(), 80);
+		CHECK_EQUAL (lm.getSize(), (size_t)80);
 	}
 
  // -------------------------------------------------------

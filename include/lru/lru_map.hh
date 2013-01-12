@@ -1,12 +1,10 @@
-// SKETCH
-/** -------------------------------------------------------
+/**
+ * @class  lru_map <lru_map.hh>
+ * @brief  Template header for lru_map ADT
+ * @see    hashTable <hashtable.hh>
  * @author Vicente Adolfo Bolea Sanchez
  *         <vicente.bolea@gmail.com>,
  *         <vicente@unist.ac.kr>
- *
- * @file   lru_map.hh
- * @brief  Template header for lru_map ADT
- ** -------------------------------------------------------
  *
  * @section DESCRIPTION
  *
@@ -47,10 +45,6 @@ using std::pair;
 using std::list;
 using std::out_of_range;
 
-/** --------------------------------------------------------
- * @class lru_map <lru_map.hh>
- * @see hashtable <hashtable.hh>
- */
 template <class key, class value>
 class lru_map: public Collection {
 

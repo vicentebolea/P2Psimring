@@ -1,20 +1,10 @@
-/** -------------------------------------------------------
- * @author Vicente Adolfo Bolea Sanchez
- *         <vicente.bolea@gmail.com>,
- *         <vicente@unist.ac.kr>
- *
- * @file   hashtable.tcc
- * @brief  Template source file for hashtable ADT
- ** ------------------------------------------------------- 
- */
-
 #ifndef __HASHTABLE_TCC_
 #define __HASHTABLE_TCC_
 
 /////////////////////////PUBLIC////////////////////////////
 
 
-/** --------------------------------------------------------
+/** ***************************************************//**
  * @pre _size > 0
  */
 template <class key, class value>
@@ -25,7 +15,7 @@ hashTable<key, value>::hashTable (size_t _size = 128) {
 }
 
 
-/** --------------------------------------------------------
+/** ***************************************************//**
  *
  */
 template <class key, class value>
@@ -36,7 +26,7 @@ hashTable<key, value>::~hashTable () {
 // ================== OPERATIONS ==========================
 
 
-/** -------------------------------------------------------
+/** ***************************************************//**
  * @pre key != NULL and value != NULL
 	* @post buckets[h(key)] == value
  */
@@ -59,7 +49,7 @@ hashTable<key, value>::insert (const key& k, const value& v) {
 }
 
 
-/** -------------------------------------------------------
+/** ***************************************************//**
  *
  */
 template <class key, class value>
@@ -70,7 +60,7 @@ hashTable<key, value>::remove (const key& k) {
 }
 
 
-/** -------------------------------------------------------
+/** ***************************************************//**
  * 
  * @throw  STL Exception "out_of_range"
  * @param  The key of the object that you are looking for
@@ -93,7 +83,7 @@ throw (out_of_range)
 }
 
 
-/** -------------------------------------------------------
+/** ***************************************************//**
  * @param  The key of the object that you are looking for
  * @return A boolean variable if it is found
  */
@@ -107,7 +97,7 @@ hashTable<key, value>::find (const key& k) {
 /////////////////////////PROTECTED/////////////////////////
 
 
-/** -------------------------------------------------------
+/** ***************************************************//**
  * @return  An boolean indicating if the load_factor is 
  *          over the upper threshold e.g 1.5
  */
@@ -117,7 +107,7 @@ inline double hashTable<key, value>::over_threshold () const {
 }
 
 
-/** -------------------------------------------------------
+/** ***************************************************//**
  * This method will resize the hash table to the double 
  * of the current size.
  *
@@ -155,9 +145,9 @@ void hashTable<key, value>::rehash () {
 }
 
 
-/** -------------------------------------------------------
- * Simple hash function which can represent
- * less than 32 bits number, It uses modulo.
+/** ***************************************************//**
+ * @brief  Simple hash function which can represent
+ *         less than 32 bits number, It uses modulo.
  *
  * @param    A key object
  * @param    An integer with the domain of the function
@@ -180,3 +170,4 @@ hashTable<key, value>::h (const key& k, size_t length = 0) const
 }
 
 #endif
+

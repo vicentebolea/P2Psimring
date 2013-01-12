@@ -1,15 +1,15 @@
-.TH "lru_map< key, value >" 3 "Sat Jan 12 2013" "p2p-distrubuted" \" -*- nroff -*-
+.TH "lru_map" 3 "Sat Jan 12 2013" "p2p-distrubuted" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-lru_map< key, value > \- 
+lru_map \- 
 .SH SYNOPSIS
 .br
 .PP
 .PP
 \fC#include <>>\fP
 .PP
-Inherits \fBCollection\fP\&.
+Inherits \fBCollection\fP.
 .SS "Public Member Functions"
 
 .in +1c
@@ -19,15 +19,15 @@ Inherits \fBCollection\fP\&.
 .ti -1c
 .RI "void \fBinsert\fP (const key &, const value &)"
 .br
-.RI "\fIPush back in the linked list the given value and store the key and the address of that value in the hash table\&. In case that the pair is already in the list it will be moved to the newest position\&. \fP"
+.RI "\fIPush back in the linked list the given value and store the key and the address of that value in the hash table. In case that the pair is already in the list it will be moved to the newest position. \fP"
 .ti -1c
 .RI "void \fBpop\fP (void)  throw (out_of_range)"
 .br
-.RI "\fIRemove the older element of the list and its reference in the hash table\&. \fP"
+.RI "\fIRemove the older element of the list and its reference in the hash table. \fP"
 .ti -1c
 .RI "const value & \fBlookup\fP (const key &)  throw (out_of_range)"
 .br
-.RI "\fIThis method will search the value of the given key\&. If it is found, It will remove the element and push into the last position of the list, e\&.g\&. the newest element\&. \fP"
+.RI "\fIThis method will search the value of the given key. If it is found, It will remove the element and push into the last position of the list, e.g. the newest element. \fP"
 .ti -1c
 .RI "const value & \fBoldest\fP (void)  throw (out_of_range)"
 .br
@@ -52,28 +52,26 @@ Inherits \fBCollection\fP\&.
 .RI "list< pair< key, value > > \fBll\fP"
 .br
 .ti -1c
-.RI "\fBhashTable\fP< key, typename list
-.br
-< value >::iterator > \fBht\fP"
+.RI "\fBhashTable\fP< key, typename list< value >::iterator > \fBht\fP"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
 
-.SS "template<class key, class value>class lru_map< key, value >"
+.SS "template<class key, class value> class lru_map< key, value >"
 --------------------------------------------------------
 .PP
 \fBSee also:\fP
 .RS 4
-hashtable <\fBhashtable\&.hh\fP> 
+hashtable <\fBhashtable.hh\fP> 
 .RE
 .PP
 
 .SH "Member Function Documentation"
 .PP 
-.SS "template<class key , class value > void \fBlru_map\fP< key, value >::\fBinsert\fP (const key &k, const value &v)"
+.SS "template<class key , class value > void \fBlru_map\fP< key, value >::insert (const key &k, const value &v)"
 .PP
-Push back in the linked list the given value and store the key and the address of that value in the hash table\&. In case that the pair is already in the list it will be moved to the newest position\&. -------------------------------------------------------- 
+Push back in the linked list the given value and store the key and the address of that value in the hash table. In case that the pair is already in the list it will be moved to the newest position. -------------------------------------------------------- 
 .PP
 \fBParameters:\fP
 .RS 4
@@ -88,9 +86,9 @@ void
 .RE
 .PP
 
-.SS "template<class key , class value > const value & \fBlru_map\fP< key, value >::\fBlookup\fP (const key &k)  throw (out_of_range)"
+.SS "template<class key , class value > const value & \fBlru_map\fP< key, value >::lookup (const key &k)  throw (out_of_range)"
 .PP
-This method will search the value of the given key\&. If it is found, It will remove the element and push into the last position of the list, e\&.g\&. the newest element\&. -------------------------------------------------------- 
+This method will search the value of the given key. If it is found, It will remove the element and push into the last position of the list, e.g. the newest element. -------------------------------------------------------- 
 .PP
 \fBReturns:\fP
 .RS 4
@@ -98,7 +96,7 @@ The value paired with the given key
 .RE
 .PP
 
-.SS "template<class key , class value > const value & \fBlru_map\fP< key, value >::\fBnewest\fP (void)  throw (out_of_range)"-------------------------------------------------------- 
+.SS "template<class key , class value > const value & \fBlru_map\fP< key, value >::newest (void)  throw (out_of_range)"-------------------------------------------------------- 
 .PP
 \fBReturns:\fP
 .RS 4
@@ -106,7 +104,7 @@ The oldest element of the LRU_map
 .RE
 .PP
 
-.SS "template<class key , class value > const value & \fBlru_map\fP< key, value >::\fBoldest\fP (void)  throw (out_of_range)"-------------------------------------------------------- 
+.SS "template<class key , class value > const value & \fBlru_map\fP< key, value >::oldest (void)  throw (out_of_range)"-------------------------------------------------------- 
 .PP
 \fBReturns:\fP
 .RS 4
@@ -114,10 +112,10 @@ The oldest element of the LRU_map
 .RE
 .PP
 
-.SS "template<class key , class value > void \fBlru_map\fP< key, value >::\fBpop\fP (void)  throw (out_of_range)"
+.SS "template<class key , class value > void \fBlru_map\fP< key, value >::pop (void)  throw (out_of_range)"
 .PP
-Remove the older element of the list and its reference in the hash table\&. -------------------------------------------------------- 
-.SS "template<class key , class value > void \fBlru_map\fP< key, value >::\fBupdate\fP (const key &k, const value &v)  throw (out_of_range)\fC [protected]\fP"-------------------------------------------------------- 
+Remove the older element of the list and its reference in the hash table. -------------------------------------------------------- 
+.SS "template<class key , class value > void \fBlru_map\fP< key, value >::update (const key &k, const value &v)  throw (out_of_range)\fC [protected]\fP"-------------------------------------------------------- 
 .PP
 \fBParameters:\fP
 .RS 4
@@ -128,4 +126,4 @@ Remove the older element of the list and its reference in the hash table\&. ----
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for p2p-distrubuted from the source code\&.
+Generated automatically by Doxygen for p2p-distrubuted from the source code.

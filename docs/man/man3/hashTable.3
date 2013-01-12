@@ -1,13 +1,18 @@
-.TH "hashTable< key, value >" 3 "Sat Jan 12 2013" "p2p-distrubuted" \" -*- nroff -*-
+.TH "hashTable" 3 "Sat Jan 12 2013" "p2p-distrubuted" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-hashTable< key, value > \- 
+hashTable \- 
+.PP
+Template header for hashtable ADT.  
+
 .SH SYNOPSIS
 .br
 .PP
 .PP
-Inherits \fBCollection\fP\&.
+\fC#include <hashtable.hh>\fP
+.PP
+Inherits \fBCollection\fP.
 .SS "Classes"
 
 .in +1c
@@ -20,9 +25,6 @@ Inherits \fBCollection\fP\&.
 .in +1c
 .ti -1c
 .RI "\fBhashTable\fP (size_t)"
-.br
-.ti -1c
-.RI "\fB~hashTable\fP ()"
 .br
 .ti -1c
 .RI "bool \fBinsert\fP (const key &, const value &)"
@@ -46,6 +48,7 @@ Inherits \fBCollection\fP\&.
 .ti -1c
 .RI "uint32_t \fBh\fP (const key &, size_t) const "
 .br
+.RI "\fISimple hash function which can represent less than 32 bits number, It uses modulo. \fP"
 .ti -1c
 .RI "void \fBrehash\fP (void)"
 .br
@@ -64,28 +67,74 @@ Inherits \fBCollection\fP\&.
 
 .in +1c
 .ti -1c
-.RI "static const double \fBthreshold\fP = 1\&.5"
+.RI "static const double \fBthreshold\fP = 1.5"
 .br
 .in -1c
+.SH "Detailed Description"
+.PP 
 
 .SS "template<class key, class value> class hashTable< key, value >"
+Template header for hashtable ADT. 
 
+\fBAuthor:\fP
+.RS 4
+Vicente Adolfo Bolea Sanchez <vicente.bolea@gmail.com>, <vicente@unist.ac.kr>
+.RE
+.PP
+.SH "DESCRIPTION"
+.PP
+This is the implementation of a hash table this hash table uses a linked list to prevent colisions this is chained hash table.
+.PP
+Also to keep a good load factor the hash table will be resize whenever the load factor is over 150%. Nevertheless I am not rehashing to reduce the size
+.PP
+For this matter I wonder to use another linkedlist to keep track of all the keys stores, then I can iterate over the table.
+.PP
+For now I am using a simple hash function which just break the four first bytes of the key and apply mod with the bucket's table length. 
+.PP
+.nf
+
+ * Hash function 32 bits:
+ * 
+ * 00000000 00000000 00000000 XXXXXXXX
+ * 00000000 00000000 XXXXXXXX 00000000
+ * 00000000 XXXXXXXX 00000000 00000000
+ * XXXXXXXX 00000000 00000000 00000000
+ * 
+ * KEY ----------------------> entry 
+ *      buckets [hash (KEY)]
+ *
+ * Here is the model that I used to implement 
+ * this hash table: 
+ *
+ * key | hash(KEY) |     buckets [hash (KEY)]
+ * ----|-----------|------------------------------
+ *
+ *                 +------+--------+-------------+
+ * KEY5 --+  +---->| KEY1 | VALUE1 |link to entry|
+ *        |  |     +------+--------+-------------+
+ * KEY1 --+--+ +-->| KEY2 | VALUE2 |link to entry|
+ *        |    |   +------+--------+-------------+
+ * KEY3 --+----+-->| KEY3 | VALUE3 |link to entry|
+ *        |    |   +------+--------+-------------+
+ * KEY2 --+----+   | KEY4 | VALUE4 |link to entry|
+ *        |        +------+--------+-------------+
+ *        +------->| KEY5 | VALUE5 |link to entry|
+ *                 +------+--------+-------------+
+ * 
+.fi
+.PP
+ 
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "template<class key , class value > \fBhashTable\fP< key, value >::\fBhashTable\fP (size_t_size = \fC128\fP)"-------------------------------------------------------- 
-.PP
-\fBPrecondition:\fP
+.SS "template<class key , class value > \fBhashTable\fP< key, value >::\fBhashTable\fP (size_t_size = \fC128\fP)"\fBPrecondition:\fP
 .RS 4
 _size > 0 
 .RE
 .PP
 
-.SS "template<class key , class value > \fBhashTable\fP< key, value >::~\fBhashTable\fP ()"-------------------------------------------------------- 
 .SH "Member Function Documentation"
 .PP 
-.SS "template<class key, class value > bool \fBhashTable\fP< key, value >::\fBfind\fP (const key &k)"------------------------------------------------------- 
-.PP
-\fBParameters:\fP
+.SS "template<class key, class value > bool \fBhashTable\fP< key, value >::find (const key &k)"\fBParameters:\fP
 .RS 4
 \fIThe\fP key of the object that you are looking for 
 .RE
@@ -96,9 +145,9 @@ A boolean variable if it is found
 .RE
 .PP
 
-.SS "template<class key, class value > uint32_t \fBhashTable\fP< key, value >::\fBh\fP (const key &k, size_tlength = \fC0\fP) const\fC [inline, protected]\fP"------------------------------------------------------- Simple hash function which can represent less than 32 bits number, It uses modulo\&.
+.SS "template<class key, class value > uint32_t \fBhashTable\fP< key, value >::h (const key &k, size_tlength = \fC0\fP) const\fC [inline, protected]\fP"
 .PP
-\fBParameters:\fP
+Simple hash function which can represent less than 32 bits number, It uses modulo. \fBParameters:\fP
 .RS 4
 \fIA\fP key object 
 .br
@@ -116,9 +165,7 @@ length should be greater than 0
 .RE
 .PP
 
-.SS "template<class key, class value> bool \fBhashTable\fP< key, value >::\fBinsert\fP (const key &k, const value &v)"------------------------------------------------------- 
-.PP
-\fBPrecondition:\fP
+.SS "template<class key, class value> bool \fBhashTable\fP< key, value >::insert (const key &k, const value &v)"\fBPrecondition:\fP
 .RS 4
 key != NULL and value != NULL 
 .RE
@@ -129,9 +176,7 @@ buckets[h(key)] == value
 .RE
 .PP
 
-.SS "template<class key, class value > const value & \fBhashTable\fP< key, value >::\fBlookup\fP (const key &k)  throw (out_of_range)"-------------------------------------------------------
-.PP
-\fBExceptions:\fP
+.SS "template<class key, class value > const value & \fBhashTable\fP< key, value >::lookup (const key &k)  throw (out_of_range)"\fBExceptions:\fP
 .RS 4
 \fISTL\fP Exception 'out_of_range' 
 .RE
@@ -147,17 +192,15 @@ An instance of the object paired with the given key
 .RE
 .PP
 
-.SS "template<class key , class value > double \fBhashTable\fP< key, value >::\fBover_threshold\fP (void) const\fC [inline, protected]\fP"------------------------------------------------------- 
-.PP
-\fBReturns:\fP
+.SS "template<class key , class value > double \fBhashTable\fP< key, value >::over_threshold (void) const\fC [inline, protected]\fP"\fBReturns:\fP
 .RS 4
-An boolean indicating if the load_factor is over the upper threshold e\&.g 1\&.5 
+An boolean indicating if the load_factor is over the upper threshold e.g 1.5 
 .RE
 .PP
 
-.SS "template<class key , class value > void \fBhashTable\fP< key, value >::\fBrehash\fP (void)\fC [protected]\fP"------------------------------------------------------- This method will resize the hash table to the double of the current size\&.
+.SS "template<class key , class value > void \fBhashTable\fP< key, value >::rehash (void)\fC [protected]\fP"This method will resize the hash table to the double of the current size.
 .PP
-First it will create a new table and it will be filled with the old elements and keys\&. After that the old table will be removed\&.
+First it will create a new table and it will be filled with the old elements and keys. After that the old table will be removed.
 .PP
 \fBParameters:\fP
 .RS 4
@@ -170,8 +213,7 @@ void
 .RE
 .PP
 
-.SS "template<class key, class value > void \fBhashTable\fP< key, value >::\fBremove\fP (const key &k)"------------------------------------------------------- 
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for p2p-distrubuted from the source code\&.
+Generated automatically by Doxygen for p2p-distrubuted from the source code.
