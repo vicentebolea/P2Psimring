@@ -15,7 +15,7 @@
 
 
 /** --------------------------------------------------------
- *
+ * @pre _size > 0
  */
 template <class key, class value>
 hashTable<key, value>::hashTable (size_t _size = 128) {
@@ -37,7 +37,8 @@ hashTable<key, value>::~hashTable () {
 
 
 /** -------------------------------------------------------
- *
+ * @pre key != NULL and value != NULL
+	* @post buckets[h(key)] == value
  */
 template <class key, class value>
 bool

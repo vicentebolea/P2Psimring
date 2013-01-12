@@ -1,8 +1,8 @@
-#include <unittest++/UnitTest++.h>
-#include <hashtable.hh>
 #include <exception>
-#include <stdexcept>
+#include <hashtable.hh>
 #include <iostream>
+#include <stdexcept>
+#include <unittest++/UnitTest++.h>
 
 using std::out_of_range;
 

@@ -26,11 +26,11 @@
  * @return void
  */
 template <class key, class value>
-void lru_map<key, value>::push (const key& k, const value& v) {
+void lru_map<key, value>::insert (const key& k, const value& v) {
 
- if (!ht.search (k)) {
-  ll.push_back (k,v);
-  ht.push (k, --ll.end()); // :TRICKY: end() returns the last?
+ if (!ht.find(k)) {
+  ll.push_back (pair<key, value>(k,v));
+  ht.insert (k, --ll.end()); // :TRICKY: end() returns the last?
   size++;
 
  } else {
@@ -40,28 +40,18 @@ void lru_map<key, value>::push (const key& k, const value& v) {
  if (size > max) pop();
 }
 
-
 /** --------------------------------------------------------
  * Remove the older element of the list and its reference in
  * the hash table.
  */
 template <class key, class value>
-void lru_map<key, value>::pop () {
+void lru_map<key, value>::pop () throw (out_of_range) {
 
  key k (ll.begin().first);
  ht.remove (k);
 
  ll.pop_front();
  size--;
-}
-
-
-/** --------------------------------------------------------
- * @return  The oldest element of the LRU_map
- */
-template <class key, class value>
-const value& lru_map<key, value>::front () {
- return ll.front().second;
 }
 
 /** --------------------------------------------------------
@@ -73,13 +63,29 @@ const value& lru_map<key, value>::front () {
  */
 template <class key, class value>
 const value&
-lru_map<key, value>::get (const key& k) throw (out_of_range) {
+lru_map<key, value>::lookup (const key& k) throw (out_of_range) {
 
  typename list<value>::iterator it = ht.at (k);
  value& tmp ((*it).second);
  update (k, tmp);
 
  return tmp;
+}
+
+/** --------------------------------------------------------
+ * @return  The oldest element of the LRU_map
+ */
+template <class key, class value>
+const value& lru_map<key, value>::oldest () throw (out_of_range) {
+ return ll.front().second;
+}
+
+/** --------------------------------------------------------
+ * @return  The oldest element of the LRU_map
+ */
+template <class key, class value>
+const value& lru_map<key, value>::newest () throw (out_of_range) {
+ return ll.back().second;
 }
 
 ////////////////////////  PRIVATE   /////////////////////////

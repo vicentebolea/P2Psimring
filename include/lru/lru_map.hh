@@ -58,9 +58,10 @@ class lru_map: public Collection {
   lru_map (size_t _max) : max (_max) {}
 
   void insert (const key&, const value&);
+  void pop (void) throw (out_of_range);
   const value& lookup (const key&) throw (out_of_range);
-  void pop (void);
-  const value& front (void);
+  const value& oldest (void) throw (out_of_range);
+  const value& newest (void) throw (out_of_range);
 
  protected:
   void update (const key&, const value&) throw (out_of_range);

@@ -4,57 +4,81 @@
 #include <stdexcept>
 #include <iostream>
 
+using std::out_of_range;
+
 struct lmfixture {
-	lru_map<int, int> ht;
+	lru_map<int, int> lm;
 	int size;
 
-	htfixture() {
+	lmfixture() : lm (50) {
 		size = 100;
 		for (int i = 0; i < size; i++)
-			ht.insert (i, i);
+			lm.insert (i, i);
 	}
 
-	~htfixture () {}
+	~lmfixture () {}
 };
 
 SUITE (lru_map_basic) {
-	TEST_FIXTURE (lm, insert) {
+
+ // -------------------------------------------------------
+	TEST_FIXTURE (lmfixture, insert) {
 		CHECK_EQUAL (lm.getSize(), 100);
 	}
 
-	TEST_FIXTURE (lm, lookup) {
+ // -------------------------------------------------------
+	TEST_FIXTURE (lmfixture, lookup) {
   for (int i = 0; i < 100; i++)
-   lm.push (i,i);
+			CHECK_EQUAL (lm.lookup(i), i); 
 
 	}
 
-	TEST (pop) {
-
+ // -------------------------------------------------------
+	TEST_FIXTURE (lmfixture, pop) {
+  for (int i = 0; i < 20; i++)
+			lm.pop();
+  
+		CHECK_EQUAL (lm.getSize(), 80);
 	}
 
-	TEST (front) {
-
+ // -------------------------------------------------------
+	TEST_FIXTURE (lmfixture, oldest) {
+  for (int i = 0; i < 20; i++)
+			lm.pop();
+		
+		CHECK_EQUAL (lm.oldest(), 70);
 	}
-}
-
-SUITE (lru_map_bad) {
-	TEST (insert) {
-
-
-	}
-
-	TEST (lookup) {
-
-	}
-
-	TEST (pop) {
-
-	}
-
-	TEST (front) {
-
+	TEST_FIXTURE (lmfixture, newest) {
+  for (int i = 0; i < 20; i++)
+			lm.pop();
+		
+		CHECK_EQUAL (lm.newest(), 70);
 	}
 }
+
+//SUITE (lru_map_bad) {
+//
+// // -------------------------------------------------------
+//	TEST (insert) {
+//
+//
+//	}
+//
+// // -------------------------------------------------------
+//	TEST (lookup) {
+//
+//	}
+//
+// // -------------------------------------------------------
+//	TEST (pop) {
+//
+//	}
+//
+// // -------------------------------------------------------
+//	TEST (front) {
+//
+//	}
+//}
 
 int main () {
 	return UnitTest::RunAllTests();
