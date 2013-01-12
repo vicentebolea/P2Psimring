@@ -1,0 +1,38 @@
+.TH "dictionary< key, value >" 3 "Sat Jan 12 2013" "p2p-distrubuted" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+dictionary< key, value > \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBinsert\fP (const key &k, const value &v)=0"
+.br
+.ti -1c
+.RI "virtual void \fBremove\fP (const key &k)=0"
+.br
+.ti -1c
+.RI "virtual const value & \fBlookup\fP (const key &k)=0  throw (out_of_range)"
+.br
+.ti -1c
+.RI "size_t \fBsize\fP ()"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "size_t \fBsize\fP"
+.br
+.in -1c
+
+.SS "template<class key, class value> class dictionary< key, value >"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for p2p-distrubuted from the source code\&.

@@ -1,0 +1,177 @@
+.TH "hashTable< key, value >" 3 "Sat Jan 12 2013" "p2p-distrubuted" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+hashTable< key, value > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBCollection\fP\&.
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBmatch_key\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBhashTable\fP (size_t)"
+.br
+.ti -1c
+.RI "\fB~hashTable\fP ()"
+.br
+.ti -1c
+.RI "bool \fBinsert\fP (const key &, const value &)"
+.br
+.ti -1c
+.RI "void \fBremove\fP (const key &)"
+.br
+.ti -1c
+.RI "bool \fBfind\fP (const key &)"
+.br
+.ti -1c
+.RI "const value & \fBlookup\fP (const key &)  throw (out_of_range)"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "double \fBover_threshold\fP (void) const "
+.br
+.ti -1c
+.RI "uint32_t \fBh\fP (const key &, size_t) const "
+.br
+.ti -1c
+.RI "void \fBrehash\fP (void)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "list< entry > * \fBbuckets\fP"
+.br
+.ti -1c
+.RI "size_t \fBbuckets_no\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const double \fBthreshold\fP = 1\&.5"
+.br
+.in -1c
+
+.SS "template<class key, class value> class hashTable< key, value >"
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class key , class value > \fBhashTable\fP< key, value >::\fBhashTable\fP (size_t_size = \fC128\fP)"-------------------------------------------------------- 
+.PP
+\fBPrecondition:\fP
+.RS 4
+_size > 0 
+.RE
+.PP
+
+.SS "template<class key , class value > \fBhashTable\fP< key, value >::~\fBhashTable\fP ()"-------------------------------------------------------- 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class key, class value > bool \fBhashTable\fP< key, value >::\fBfind\fP (const key &k)"------------------------------------------------------- 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIThe\fP key of the object that you are looking for 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+A boolean variable if it is found 
+.RE
+.PP
+
+.SS "template<class key, class value > uint32_t \fBhashTable\fP< key, value >::\fBh\fP (const key &k, size_tlength = \fC0\fP) const\fC [inline, protected]\fP"------------------------------------------------------- Simple hash function which can represent less than 32 bits number, It uses modulo\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIA\fP key object 
+.br
+\fIAn\fP integer with the domain of the function 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+An unique integer of 32b for indexing the table 
+.RE
+.PP
+\fBPrecondition:\fP
+.RS 4
+length should be greater than 0 
+.RE
+.PP
+
+.SS "template<class key, class value> bool \fBhashTable\fP< key, value >::\fBinsert\fP (const key &k, const value &v)"------------------------------------------------------- 
+.PP
+\fBPrecondition:\fP
+.RS 4
+key != NULL and value != NULL 
+.RE
+.PP
+\fBPostcondition:\fP
+.RS 4
+buckets[h(key)] == value 
+.RE
+.PP
+
+.SS "template<class key, class value > const value & \fBhashTable\fP< key, value >::\fBlookup\fP (const key &k)  throw (out_of_range)"-------------------------------------------------------
+.PP
+\fBExceptions:\fP
+.RS 4
+\fISTL\fP Exception 'out_of_range' 
+.RE
+.PP
+\fBParameters:\fP
+.RS 4
+\fIThe\fP key of the object that you are looking for 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+An instance of the object paired with the given key 
+.RE
+.PP
+
+.SS "template<class key , class value > double \fBhashTable\fP< key, value >::\fBover_threshold\fP (void) const\fC [inline, protected]\fP"------------------------------------------------------- 
+.PP
+\fBReturns:\fP
+.RS 4
+An boolean indicating if the load_factor is over the upper threshold e\&.g 1\&.5 
+.RE
+.PP
+
+.SS "template<class key , class value > void \fBhashTable\fP< key, value >::\fBrehash\fP (void)\fC [protected]\fP"------------------------------------------------------- This method will resize the hash table to the double of the current size\&.
+.PP
+First it will create a new table and it will be filled with the old elements and keys\&. After that the old table will be removed\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIvoid\fP 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+void 
+.RE
+.PP
+
+.SS "template<class key, class value > void \fBhashTable\fP< key, value >::\fBremove\fP (const key &k)"------------------------------------------------------- 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for p2p-distrubuted from the source code\&.

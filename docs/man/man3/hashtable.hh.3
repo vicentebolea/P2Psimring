@@ -1,0 +1,76 @@
+.TH "/home/vicente/Documents/developing/unip2p/include/lru/hashtable.hh" 3 "Sat Jan 12 2013" "p2p-distrubuted" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/vicente/Documents/developing/unip2p/include/lru/hashtable.hh \- 
+.PP
+Template header for hashtable ADT\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <collection\&.hh>\fP
+.br
+\fC#include <list>\fP
+.br
+\fC#include <algorithm>\fP
+.br
+\fC#include <stdexcept>\fP
+.br
+\fC#include <inttypes\&.h>\fP
+.br
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <stddef\&.h>\fP
+.br
+\fC#include <assert\&.h>\fP
+.br
+\fC#include <hashtable\&.tcc>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBhashTable< key, value >\fP"
+.br
+.ti -1c
+.RI "struct \fBhashTable< key, value >::match_key\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Template header for hashtable ADT\&. 
+
+------------------------------------------------------- 
+.PP
+\fBAuthor:\fP
+.RS 4
+Vicente Adolfo Bolea Sanchez <vicente.bolea@gmail.com>, <vicente@unist.ac.kr>
+.RE
+.PP
+-------------------------------------------------------
+.SH "DESCRIPTION"
+.PP
+This is the implementation of a hash table this hash table uses a linked list to prevent colisions this is chained hash table\&.
+.PP
+Also to keep a good load factor the hash table will be resize whenever the load factor is over 150%\&. Nevertheless I am not rehashing to reduce the size
+.PP
+For this matter I wonder to use another linkedlist to keep track of all the keys stores, then I can iterate over the table\&.
+.PP
+For now I am using a simple hash function which just break the four first bytes of the key and apply mod with the bucket's table length\&.
+.PP
+Hash function 32 bits:
+.PP
+00000000 00000000 00000000 XXXXXXXX 00000000 00000000 XXXXXXXX 00000000 00000000 XXXXXXXX 00000000 00000000 XXXXXXXX 00000000 00000000 00000000
+.PP
+KEY ----------------------> entry buckets [hash (KEY)]
+.PP
+Here is the model that I used to implement this hash table:
+.PP
+key | hash(KEY) | buckets [hash (KEY)] ----|-----------|------------------------------
+.PP
++------+--------+-------------+ KEY5 --+ +---->| KEY1 | VALUE1 |link to entry| | | +------+--------+-------------+ KEY1 --+--+ +-->| KEY2 | VALUE2 |link to entry| | | +------+--------+-------------+ KEY3 --+----+-->| KEY3 | VALUE3 |link to entry| | | +------+--------+-------------+ KEY2 --+----+ | KEY4 | VALUE4 |link to entry| | +------+--------+-------------+ +------->| KEY5 | VALUE5 |link to entry| +------+--------+-------------+ 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for p2p-distrubuted from the source code\&.

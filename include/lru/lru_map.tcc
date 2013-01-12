@@ -16,7 +16,7 @@
 
 
 /** --------------------------------------------------------
- * Push back in the linked list the given value and store
+ * @brief  Push back in the linked list the given value and store
  * the key and the address of that value in the hash table.
  * In case that the pair is already in the list it will 
  * be moved to the newest position
@@ -41,8 +41,8 @@ void lru_map<key, value>::insert (const key& k, const value& v) {
 }
 
 /** --------------------------------------------------------
- * Remove the older element of the list and its reference in
- * the hash table.
+ * @brief  Remove the older element of the list and its 
+	*         reference in the hash table.
  */
 template <class key, class value>
 void lru_map<key, value>::pop () throw (out_of_range) {
@@ -55,7 +55,7 @@ void lru_map<key, value>::pop () throw (out_of_range) {
 }
 
 /** --------------------------------------------------------
- * This method will search the value of the given key. 
+ * @brief This method will search the value of the given key. 
  * If it is found, It will remove the element and push into 
  * the last position of the list, e.g. the newest element.
  * 
