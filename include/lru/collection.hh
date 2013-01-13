@@ -1,4 +1,5 @@
 /*
+ * @class Collection
  * Simple interface of containers.
  * Expecify what it should do
  *

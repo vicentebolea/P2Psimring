@@ -146,8 +146,8 @@ void hashTable<key, value>::rehash () {
 
 
 /** ***************************************************//**
- * @brief  Simple hash function which can represent
- *         less than 32 bits number, It uses modulo.
+ * @brief    Simple hash function which can represent
+ *           less than 32 bits number, It uses modulo.
  *
  * @param    A key object
  * @param    An integer with the domain of the function

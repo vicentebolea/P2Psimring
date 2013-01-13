@@ -13,7 +13,7 @@ hashtable: hashtable_test.cc
 
 lru_map: lru_map_test.cc
 	$(CXX) -c $(CXXFLAGS) $^
-	$(CXX) -o ./$ lru_map_test.o $(LDFLAGS)
+	$(CXX) -o ./$@ lru_map_test.o $(LDFLAGS)
 
 clean:						
 	rm chain_test

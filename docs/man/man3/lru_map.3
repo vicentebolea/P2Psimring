@@ -1,13 +1,16 @@
-.TH "lru_map" 3 "Sat Jan 12 2013" "p2p-distrubuted" \" -*- nroff -*-
+.TH "lru_map" 3 "Sun Jan 13 2013" "p2p-distrubuted" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
 lru_map \- 
+.PP
+Template header for \fBlru_map\fP ADT.  
+
 .SH SYNOPSIS
 .br
 .PP
 .PP
-\fC#include <>>\fP
+\fC#include <lru_map.hh>\fP
 .PP
 Inherits \fBCollection\fP.
 .SS "Public Member Functions"
@@ -52,32 +55,62 @@ Inherits \fBCollection\fP.
 .RI "list< pair< key, value > > \fBll\fP"
 .br
 .ti -1c
-.RI "\fBhashTable\fP< key, typename list< value >::iterator > \fBht\fP"
+.RI "\fBhashTable\fP< key, typename list< pair< key, value > >::iterator > \fBht\fP"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
 
 .SS "template<class key, class value> class lru_map< key, value >"
---------------------------------------------------------
-.PP
+Template header for \fBlru_map\fP ADT. 
+
 \fBSee also:\fP
 .RS 4
-hashtable <\fBhashtable.hh\fP> 
+\fBhashTable\fP <\fBhashtable.hh\fP> 
 .RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Vicente Adolfo Bolea Sanchez <vicente.bolea@gmail.com>, <vicente@unist.ac.kr>
+.RE
+.PP
+.SH "DESCRIPTION"
+.PP
+HASHTABLE =========  This is just a sketch for the LRU map class.
+.PP
+I am wondering to use a hash table + doubly linked list
+.IP "\(bu" 2
+- - Since for the three operations that im using I have theses complexities:
+.IP "  \(bu" 4
+insert: O(1)
+.IP "  \(bu" 4
+lookup: O(1)
+.IP "  \(bu" 4
+pop: O(1)
+.PP
+
+.PP
+.PP
+These complexities will be in the best case since the hash table will may rehash sometimes and in each rehash will take O(n + buckets).
+.PP
+Here is the way that I am implementing this LRU:
+.IP "\(bu" 2
+The LL will just store the diskpage.
+.PP
+.PP
+.IP "\(bu" 2
+The hash table given a key (wish in this experiment will be a set of number) will store pointers to each node of the LL. 
 .PP
 
 .SH "Member Function Documentation"
 .PP 
 .SS "template<class key , class value > void \fBlru_map\fP< key, value >::insert (const key &k, const value &v)"
 .PP
-Push back in the linked list the given value and store the key and the address of that value in the hash table. In case that the pair is already in the list it will be moved to the newest position. -------------------------------------------------------- 
-.PP
-\fBParameters:\fP
+Push back in the linked list the given value and store the key and the address of that value in the hash table. In case that the pair is already in the list it will be moved to the newest position. \fBParameters:\fP
 .RS 4
-\fIA\fP given key 
+\fIkey\fP 
 .br
-\fIAn\fP Object paired with the previous key 
+\fIvalue\fP paired with the previous key 
 .RE
 .PP
 \fBReturns:\fP
@@ -88,36 +121,25 @@ void
 
 .SS "template<class key , class value > const value & \fBlru_map\fP< key, value >::lookup (const key &k)  throw (out_of_range)"
 .PP
-This method will search the value of the given key. If it is found, It will remove the element and push into the last position of the list, e.g. the newest element. -------------------------------------------------------- 
-.PP
-\fBReturns:\fP
+This method will search the value of the given key. If it is found, It will remove the element and push into the last position of the list, e.g. the newest element. \fBReturns:\fP
 .RS 4
 The value paired with the given key 
 .RE
 .PP
 
-.SS "template<class key , class value > const value & \fBlru_map\fP< key, value >::newest (void)  throw (out_of_range)"-------------------------------------------------------- 
-.PP
-\fBReturns:\fP
+.SS "template<class key , class value > const value & \fBlru_map\fP< key, value >::newest (void)  throw (out_of_range)"\fBReturns:\fP
 .RS 4
 The oldest element of the LRU_map 
 .RE
 .PP
 
-.SS "template<class key , class value > const value & \fBlru_map\fP< key, value >::oldest (void)  throw (out_of_range)"-------------------------------------------------------- 
-.PP
-\fBReturns:\fP
+.SS "template<class key , class value > const value & \fBlru_map\fP< key, value >::oldest (void)  throw (out_of_range)"\fBReturns:\fP
 .RS 4
 The oldest element of the LRU_map 
 .RE
 .PP
 
-.SS "template<class key , class value > void \fBlru_map\fP< key, value >::pop (void)  throw (out_of_range)"
-.PP
-Remove the older element of the list and its reference in the hash table. -------------------------------------------------------- 
-.SS "template<class key , class value > void \fBlru_map\fP< key, value >::update (const key &k, const value &v)  throw (out_of_range)\fC [protected]\fP"-------------------------------------------------------- 
-.PP
-\fBParameters:\fP
+.SS "template<class key , class value > void \fBlru_map\fP< key, value >::update (const key &k, const value &v)  throw (out_of_range)\fC [protected]\fP"\fBParameters:\fP
 .RS 4
 \fIA\fP key paired with the value that your are looking for 
 .RE

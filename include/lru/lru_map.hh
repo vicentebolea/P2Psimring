@@ -1,5 +1,5 @@
-/**
- * @class  lru_map <lru_map.hh>
+/** ***************************************************//**
+ * @class  lru_map 
  * @brief  Template header for lru_map ADT
  * @see    hashTable <hashtable.hh>
  * @author Vicente Adolfo Bolea Sanchez
@@ -8,11 +8,14 @@
  *
  * @section DESCRIPTION
  *
- * This is just a sketch for the LRU map class 
- * I am wondering to use a hash table + doubly linked list
- * Since for the three operations that im using i 
- * have theses complexities:
+ * HASHTABLE
+ * =========
+ * @cite This is just a sketch for the LRU map class.
  *
+ * I am wondering to use a hash table + doubly linked list
+ * - - -
+ * Since for the three operations that im using I
+ * have theses complexities:
  *  - insert:   O(1)
  *  - lookup:   O(1)
  *  - pop:      O(1) 
@@ -21,8 +24,7 @@
  * the hash table will may rehash sometimes and in each 
  * rehash will take O(n + buckets).
  *
- * The way that im implementing this LRU is the next:
- *
+ * Here is the way that I am implementing this LRU:
  *  - The LL will just store the diskpage.
  *
  *  - The hash table given a key (wish in this experiment
@@ -64,7 +66,7 @@ class lru_map: public Collection {
   size_t max;
 
   list<pair<key, value> > ll;
-  hashTable<key, typename list<value>::iterator> ht;
+  hashTable<key, typename list<pair<key, value> >::iterator> ht;
 };
 
 #include <lru_map.tcc>

@@ -23,14 +23,16 @@ SUITE (lru_map_basic) {
 
  // -------------------------------------------------------
 	TEST_FIXTURE (lmfixture, insert) {
-		CHECK_EQUAL (lm.getSize(), (size_t)100);
+		CHECK_EQUAL (lm.getSize(), (size_t)50);
 	}
 
  // -------------------------------------------------------
 	TEST_FIXTURE (lmfixture, lookup) {
-  for (int i = 0; i < 100; i++)
-			CHECK_EQUAL (lm.lookup(i), i); 
+  for (int i = 0; i < 50; i++)
+			CHECK_THROW (lm.lookup(i), out_of_range); 
 
+  for (int i = 50; i < 100; i++)
+			CHECK_EQUAL (lm.lookup(i), i); 
 	}
 
  // -------------------------------------------------------
@@ -38,7 +40,7 @@ SUITE (lru_map_basic) {
   for (int i = 0; i < 20; i++)
 			lm.pop();
   
-		CHECK_EQUAL (lm.getSize(), (size_t)80);
+		CHECK_EQUAL (lm.getSize(), (size_t)30);
 	}
 
  // -------------------------------------------------------
@@ -48,11 +50,12 @@ SUITE (lru_map_basic) {
 		
 		CHECK_EQUAL (lm.oldest(), 70);
 	}
+
 	TEST_FIXTURE (lmfixture, newest) {
   for (int i = 0; i < 20; i++)
 			lm.pop();
 		
-		CHECK_EQUAL (lm.newest(), 70);
+		CHECK_EQUAL (lm.newest(), 99);
 	}
 }
 

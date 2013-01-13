@@ -1,4 +1,4 @@
-.TH "/home/vicente/Documents/desarrollo/p2p_distributed/include/lru/lru_map.hh" 3 "Sat Jan 12 2013" "p2p-distrubuted" \" -*- nroff -*-
+.TH "/home/vicente/Documents/desarrollo/p2p_distributed/include/lru/lru_map.hh" 3 "Sun Jan 13 2013" "p2p-distrubuted" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -28,49 +28,18 @@ abstract class for dictionary ADT ----------------------------------------------
 .ti -1c
 .RI "class \fBlru_map< key, value >\fP"
 .br
+.RI "\fITemplate header for \fBlru_map\fP ADT. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 abstract class for dictionary ADT ------------------------------------------------------- 
 
-Template header for \fBlru_map\fP ADT -------------------------------------------------------.
-.PP
 ------------------------------------------------------- 
 .PP
 \fBAuthor:\fP
 .RS 4
-Vicente Adolfo Bolea Sanchez <vicente.bolea@gmail.com>, <vicente@unist.ac.kr>
+Vicente Adolfo Bolea Sanchez <vicente.bolea@gmail.com>, <vicente@unist.ac.kr> 
 .RE
-.PP
-------------------------------------------------------- 
-.PP
-\fBAuthor:\fP
-.RS 4
-Vicente Adolfo Bolea Sanchez <vicente.bolea@gmail.com>, <vicente@unist.ac.kr>
-.RE
-.PP
-.SH "DESCRIPTION"
-.PP
-This is just a sketch for the LRU map class I am wondering to use a hash table + doubly linked list Since for the three operations that im using i have theses complexities:
-.PP
-.IP "\(bu" 2
-insert: O(1)
-.IP "\(bu" 2
-lookup: O(1)
-.IP "\(bu" 2
-pop: O(1)
-.PP
-.PP
-These complexities will be in the best case since the hash table will may rehash sometimes and in each rehash will take O(n + buckets).
-.PP
-The way that im implementing this LRU is the next:
-.PP
-.IP "\(bu" 2
-The LL will just store the diskpage.
-.PP
-.PP
-.IP "\(bu" 2
-The hash table given a key (wish in this experiment will be a set of number) will store pointers to each node of the LL. 
 .PP
 
 .SH "Author"
