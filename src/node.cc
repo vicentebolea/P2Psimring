@@ -34,34 +34,30 @@ bool Node::process() {
 }
 
 //ToDo
-void Node::tneighborFunction(void *args) {}
+void Node::tneighborFunction (void* args) {}
 
-void Node::tschedulerFunction (void *args) {
+void Node::tschedulerFunction (void* args) { }
 
-
-
-}
-
-void Node::tworkerFunction (void *args) {
+void Node::tworkerFunction (void* args) {
 
 	uint64_t* hitmiss_count[2] = {&hitCount, &missCount};
 
 	while (die_thread != true || Queue.empty() != true) {
-		while (Queue.empty() && die_thread != true) 
+		while (Queue.empty() && !die_thread) 
 			pthread_mutex_lock (&empty);
-		if (die_thread == true)
+		if (die_thread)
 			continue;
 
 		Query* query = buffer_local.front();
 
-		if (processQuery(query) == false) {
+		if (!processQuery(query)) {
 			buffer_neighbor.push(query);
 			buffer_local.pop();
 
 		} else {
 			buffer_local.pop();
-			delete query;
 		}
+		delete query;
 	}
 	pthread_exit (EXIT_SUCCESS);
 }
@@ -71,7 +67,7 @@ bool Node::processQuery(Query* query) {
 
 	bool result;
 	query->setStartDate();
-	result = setCache.match (static_cast<packet*> (query), hitmiss_count);
+	result = cache.match (static_cast<packet*> (query), hitmiss_count);
 	query->setFinishedDate();
 
 	queryProcessed++;
@@ -81,8 +77,6 @@ bool Node::processQuery(Query* query) {
 }
 
 int main (int argc, char** argv) {
-
-
 
 	return EXIT_SUCCESS;
 }

@@ -1,49 +1,26 @@
+/**
+	* @class Node
+	* 
+	* SINGLETON PATTERN
+ * This file contains the node class definition
+ * this class should be executed in each node
+ * server.
+	*
+ * @verbatim 
+ *  - Dataset      = (1, 5000]
+ *  - Cache size   = 100
+ *  - Number nodes = 5
+ *
+ *  0  .. 1000 .. 2000 .. 3000 .. 4000 .. 5000
+ *  |-------|-------|-------|-------|-------|
+ *  |Node 1 |Node 2 |Node 3 | Node 4|Node 5 |
+ *  |-------|-------|-------|-------|-------|
+ *    100e    100e    100e    100e    100e
+ * @endverbatim
+	*/
+
 #ifndef __NODE_H_
 #define __NODE_H_
-
-/********************************************
-		This file contains the node class definition
-		this class should be executed in each node
-		server 
-
-	*dataset      = (1, 5000]
-	*cache size   = 100
-	*Number nodes = 5
-
-	0  .. 1000 .. 2000 .. 3000 .. 4000 .. 5000
-	|-------|-------|-------|-------|-------|
-	|Node 1 |Node 2 |Node 3 | Node 4|Node 5 |
-	|-------|-------|-------|-------|-------|
-	  100e    100e    100e    100e    100e
-
-	Thread model;
-
-	| main ( create )
-	|\
-	|\\
-	|\\\
-	| \\\
-	|  \\\
-	|   \\\___________________
-	|    \\_________          \
-	|     |         \          |
-	| scheduler   worker    neighbor  
-	|     |   ______/          |
-	|     |  / _______________/
-	|     / / /
-	|    / / /
-	|   / / /
-	|  / / /
-	| / / /
-	|/ / /
-	| / /
-	|/ /
-	| /
-	|/
-	|
-	| join
-
-	********************************************/
 
 //Classes
 #include <macros.h>
@@ -65,13 +42,13 @@
 #include <queue>
 
 class Node {
-	private:
+	protected:
 		//To act as a server
 		Server* attributes;
 		Client* scheduler;
 		Client* neighbor;
 
-		static LRUcache cache;
+		static lru_map cache;
 		static queue<Query*> buffer_local;
 		static queue<Query*> buffer_neighbor;
 
@@ -101,10 +78,15 @@ class Node {
 		bool swiftQuery (void);
 		bool schedulerQuery (void);
 
-	public:
+	protected:
 		Node();
 		~Node();
 
+	public:
+		const Node& getInstance () {
+			static Node singleton ();
+			return singleton;
+		}
 		bool init();	
 		bool process();
 

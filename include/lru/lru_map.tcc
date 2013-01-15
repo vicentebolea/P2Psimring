@@ -4,15 +4,14 @@
 ////////////////////////  PUBLIC   /////////////////////////
 
 
-/** ***************************************************//**
- * @brief  Push back in the linked list the given value and store
- * the key and the address of that value in the hash table.
- * In case that the pair is already in the list it will 
- * be moved to the newest position
- *
- * @param  key
- * @param  value paired with the previous key
- * @return void
+/**
+	* @brief  Push back in the linked list the given value and
+	*         store the key and the address of that value in
+	*         the hash table. In case that the pair is already
+	*         in the list it will be moved to the newest
+	*         position.
+ * @param[in]  k  value
+ * @param[in]  v  paired with the previous key
  */
 template <class key, class value>
 void lru_map<key, value>::insert (const key& k, const value& v) {
@@ -40,6 +39,8 @@ void lru_map<key, value>::insert (const key& k, const value& v) {
 template <class key, class value>
 void lru_map<key, value>::pop () throw (out_of_range) {
 
+	if (!size)
+		return;
  key k ((*ll.begin()).first);
  ht.remove (k);
 
@@ -48,11 +49,13 @@ void lru_map<key, value>::pop () throw (out_of_range) {
 }
 
 /** ***************************************************//**
- * @brief This method will search the value of the given key. 
- * If it is found, It will remove the element and push into 
- * the last position of the list, e.g. the newest element.
+	* @brief     This method will search the value of the given
+	*            key. If it is found, It will remove the
+	*            element and push into the last position of the
+	*            list, e.g. the newest element.
  * 
- * @return  The value paired with the given key
+	* @param[in] k    key 
+ * @return    tmp  value paired with the given key
  */
 template <class key, class value>
 const value&
@@ -84,8 +87,8 @@ const value& lru_map<key, value>::newest () throw (out_of_range) {
 ////////////////////////  PRIVATE   /////////////////////////
 
 /** ***************************************************//**
- * @param  A key paired with the value that your are looking 
- *         for
+ * @param[in]  k  value
+ * @param[in]  v  paired with the previous key
  */
 template <class key, class value>
 void

@@ -4,6 +4,7 @@
 #include <packet/packet.hh>
 #include <sys/time.h>
 
+//! :TODO:
 enum query_type {
 	GET    = 0b0001;
 	READ   = 0b0010;

@@ -13,8 +13,6 @@
 #include <error.h>
 #include <execinfo.h>
 
-#define pot(x) 1<<(x)
-
 extern char* program_invocation_short_name;
 
 using std::string;
@@ -52,7 +50,8 @@ class Exception: public exception {
 			char tmp [128], hostname[64];
 
 			gethostname (hostname, 64);
-			snprintf (tmp, 128, "[ERRNO: %i] [STR: %s] [REASON: %s] [HOSTNAME: %s]",
+			snprintf (tmp, 128, "[ERRNO: %i] [STR: %s]"
+			 " [REASON: %s] [HOSTNAME: %s]",
 					errno, strerror (errno), in, hostname);
 			strncat (message, tmp, 256);
 		}

@@ -7,23 +7,29 @@
  *         <vicente@unist.ac.kr>
  *
  * @section DESCRIPTION
+ * This is just a sketch for the LRU map class.
  *
- * HASHTABLE
- * =========
- * @cite This is just a sketch for the LRU map class.
- *
- * I am wondering to use a hash table + doubly linked list
- * - - -
- * Since for the three operations that im using I
- * have theses complexities:
- *  - insert:   O(1)
+ * @subsection TIME COMPLEXITY
+	* Here is described the time complexities of each
+	* functions: 
+ *  - insert:   O(1) (amortized time)
  *  - lookup:   O(1)
+ *  - oldest:   O(1) 
+ *  - newest:   O(1) 
  *  - pop:      O(1) 
  *
  * These complexities will be in the best case since 
  * the hash table will may rehash sometimes and in each 
- * rehash will take O(n + buckets).
+ * rehash it will take O(n + buckets).
  *
+ * @subsection METHODOLOGY
+	* This Lru map is using a hashtable+doublylinkedlist where:
+	*  - The hash table will store a pointer of each element in
+	*    the list.
+	*  - The linkedlist will be use as lru linkedlist with a
+	*    pair of key and value.
+	* 
+ * @subsection TODO
  * Here is the way that I am implementing this LRU:
  *  - The LL will just store the diskpage.
  *

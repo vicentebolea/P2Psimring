@@ -1,11 +1,11 @@
-/** -------------------------------------------------------
+/** ***************************************************//**
  * @author Vicente Adolfo Bolea Sanchez
  *         <vicente.bolea@gmail.com>,
  *         <vicente@unist.ac.kr>
  *
- * @file   lru_map.hh
+ * @class  dictionary
  * @brief  abstract class for dictionary ADT
- ** -------------------------------------------------------
+/** ***************************************************//**
  *
  */
 

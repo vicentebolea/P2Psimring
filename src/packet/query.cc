@@ -5,7 +5,6 @@ Query::Query (const packet& p): packet(p) {
 }
 
 Query::Query (const Query& that): packet(that) {
-  //queryPoint = that.queryPoint;
   scheduledDate = that.scheduledDate;
   startDate = that.startDate;
   finishedDate = that.finishedDate;

@@ -1,18 +1,18 @@
-.TH "hashTable" 3 "Sun Jan 13 2013" "p2p-distrubuted" \" -*- nroff -*-
+.TH "hashTable< key, value >" 3 "Mon Jan 14 2013" "p2p-distrubuted" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-hashTable \- 
+hashTable< key, value > \- 
 .PP
-Template header for hashtable ADT.  
+Template header for hashtable ADT\&.  
 
 .SH SYNOPSIS
 .br
 .PP
 .PP
-\fC#include <hashtable.hh>\fP
+\fC#include <hashtable\&.hh>\fP
 .PP
-Inherits \fBCollection\fP.
+Inherits \fBCollection\fP\&.
 .SS "Classes"
 
 .in +1c
@@ -48,7 +48,7 @@ Inherits \fBCollection\fP.
 .ti -1c
 .RI "uint32_t \fBh\fP (const key &, size_t) const "
 .br
-.RI "\fISimple hash function which can represent less than 32 bits number, It uses modulo. \fP"
+.RI "\fISimple hash function which can represent less than 32 bits number, It uses modulo\&. \fP"
 .ti -1c
 .RI "void \fBrehash\fP (void)"
 .br
@@ -67,14 +67,14 @@ Inherits \fBCollection\fP.
 
 .in +1c
 .ti -1c
-.RI "static const double \fBthreshold\fP = 1.5"
+.RI "static const double \fBthreshold\fP = 1\&.5"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
 
-.SS "template<class key, class value> class hashTable< key, value >"
-Template header for hashtable ADT. 
+.SS "template<class key, class value>class hashTable< key, value >"
+Template header for hashtable ADT\&. 
 
 \fBAuthor:\fP
 .RS 4
@@ -83,13 +83,13 @@ Vicente Adolfo Bolea Sanchez <vicente.bolea@gmail.com> <vicente@unist.ac.kr>
 .PP
 .SH "DESCRIPTION"
 .PP
-This is the implementation of a hash table this hash table uses a linked list to prevent colisions this is chained hash table.
+This is the implementation of a hash table this hash table uses a linked list to prevent colisions this is chained hash table\&.
 .PP
-Also to keep a good load factor the hash table will be resize whenever the load factor is over 150%. Nevertheless I am not rehashing to reduce the size
+Also to keep a good load factor the hash table will be resize whenever the load factor is over 150%\&. Nevertheless I am not rehashing to reduce the size
 .PP
-For this matter I wonder to use another linkedlist to keep track of all the keys stores, then I can iterate over the table.
+For this matter I wonder to use another linkedlist to keep track of all the keys stores, then I can iterate over the table\&.
 .PP
-For now I am using a simple hash function which just break the four first bytes of the key and apply mod with the bucket's table length. 
+For now I am using a simple hash function which just break the four first bytes of the key and apply mod with the bucket's table length\&. 
 .PP
 .nf
 
@@ -134,7 +134,7 @@ _size > 0
 
 .SH "Member Function Documentation"
 .PP 
-.SS "template<class key, class value > bool \fBhashTable\fP< key, value >::find (const key &k)"\fBParameters:\fP
+.SS "template<class key, class value > bool \fBhashTable\fP< key, value >::\fBfind\fP (const key &k)"\fBParameters:\fP
 .RS 4
 \fIThe\fP key of the object that you are looking for 
 .RE
@@ -145,9 +145,9 @@ A boolean variable if it is found
 .RE
 .PP
 
-.SS "template<class key, class value > uint32_t \fBhashTable\fP< key, value >::h (const key &k, size_tlength = \fC0\fP) const\fC [inline, protected]\fP"
+.SS "template<class key, class value > uint32_t \fBhashTable\fP< key, value >::\fBh\fP (const key &k, size_tlength = \fC0\fP) const\fC [inline, protected]\fP"
 .PP
-Simple hash function which can represent less than 32 bits number, It uses modulo. \fBParameters:\fP
+Simple hash function which can represent less than 32 bits number, It uses modulo\&. \fBParameters:\fP
 .RS 4
 \fIA\fP key object 
 .br
@@ -165,7 +165,7 @@ length should be greater than 0
 .RE
 .PP
 
-.SS "template<class key, class value> bool \fBhashTable\fP< key, value >::insert (const key &k, const value &v)"\fBPrecondition:\fP
+.SS "template<class key, class value> bool \fBhashTable\fP< key, value >::\fBinsert\fP (const key &k, const value &v)"\fBPrecondition:\fP
 .RS 4
 key != NULL and value != NULL 
 .RE
@@ -176,7 +176,7 @@ buckets[h(key)] == value
 .RE
 .PP
 
-.SS "template<class key, class value > const value & \fBhashTable\fP< key, value >::lookup (const key &k)  throw (out_of_range)"\fBExceptions:\fP
+.SS "template<class key, class value > const value & \fBhashTable\fP< key, value >::\fBlookup\fP (const key &k)  throw (out_of_range)"\fBExceptions:\fP
 .RS 4
 \fISTL\fP Exception 'out_of_range' 
 .RE
@@ -192,15 +192,15 @@ An instance of the object paired with the given key
 .RE
 .PP
 
-.SS "template<class key , class value > double \fBhashTable\fP< key, value >::over_threshold (void) const\fC [inline, protected]\fP"\fBReturns:\fP
+.SS "template<class key , class value > double \fBhashTable\fP< key, value >::\fBover_threshold\fP (void) const\fC [inline, protected]\fP"\fBReturns:\fP
 .RS 4
-An boolean indicating if the load_factor is over the upper threshold e.g 1.5 
+An boolean indicating if the load_factor is over the upper threshold e\&.g 1\&.5 
 .RE
 .PP
 
-.SS "template<class key , class value > void \fBhashTable\fP< key, value >::rehash (void)\fC [protected]\fP"This method will resize the hash table to the double of the current size.
+.SS "template<class key , class value > void \fBhashTable\fP< key, value >::\fBrehash\fP (void)\fC [protected]\fP"This method will resize the hash table to the double of the current size\&.
 .PP
-First it will create a new table and it will be filled with the old elements and keys. After that the old table will be removed.
+First it will create a new table and it will be filled with the old elements and keys\&. After that the old table will be removed\&.
 .PP
 \fBParameters:\fP
 .RS 4
@@ -216,4 +216,4 @@ void
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for p2p-distrubuted from the source code.
+Generated automatically by Doxygen for p2p-distrubuted from the source code\&.
