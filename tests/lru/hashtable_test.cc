@@ -1,6 +1,8 @@
 #include <exception>
 #include <hashtable.hh>
 #include <iostream>
+#include <stdint.h>
+#include <inttypes.h>
 #include <stdexcept>
 #include <unittest++/UnitTest++.h>
 
@@ -8,11 +10,11 @@ using std::out_of_range;
 
 struct htfixture {
 	hashTable<int, int> ht;
-	int size;
+	size_t size;
 
 	htfixture() {
 		size = 100;
-		for (int i = 0; i < size; i++)
+		for (size_t i = 0; i < size; i++)
 			ht.insert (i, i);
 	}
 
@@ -42,7 +44,7 @@ SUITE (ht_test) {
 			CHECK (!ht.find (i));
 		}
 
-		CHECK_EQUAL (ht.getSize(), 80);
+		CHECK_EQUAL (ht.getSize(), (size_t) 80);
 	}
 
 	// --------------------------------------------------------
@@ -70,7 +72,7 @@ SUITE (ht_test) {
 		for (int i = 0; i < 1000000; i++)
 			ht.insert (i, i);
 
-		CHECK_EQUAL (ht.getSize(), 1000000);
+		CHECK_EQUAL (ht.getSize(),(size_t) 1000000);
 	}
 
 	// --------------------------------------------------------

@@ -40,7 +40,7 @@ hashTable<key, value>::insert (const key& k, const value& v) {
 
  else {
   buckets[key_n].push_back (entry(k, v));
-  size++;
+  this->size++;
 
   if (over_threshold()) rehash();
 
@@ -55,7 +55,7 @@ hashTable<key, value>::insert (const key& k, const value& v) {
 template <class key, class value>
 void
 hashTable<key, value>::remove (const key& k) {
-	if (find (k)) size--;
+	if (find (k)) this->size--;
  buckets [h(k)].remove_if (match_key(k));
 }
 
@@ -102,8 +102,9 @@ hashTable<key, value>::find (const key& k) {
  *          over the upper threshold e.g 1.5
  */
 template <class key, class value>
-inline double hashTable<key, value>::over_threshold () const {
- return (double)(size/buckets_no) >= threshold;
+inline bool hashTable<key, value>::over_threshold () const {
+ return (double)(this->size/buckets_no) >= threshold;
+ return true;
 }
 
 

@@ -42,7 +42,7 @@
 #ifndef __LRU_MAP_HH_
 #define __LRU_MAP_HH_
 
-#include <collection.hh>
+#include <dictionary.hh>
 #include <hashtable.hh>
 
 #include <stdexcept>
@@ -54,12 +54,12 @@ using std::list;
 using std::out_of_range;
 
 template <class key, class value>
-class lru_map: public Collection {
+class lru_map: public dictionary<key, value> {
 
  public:
   lru_map (size_t _max) : max (_max) {}
 
-  void insert (const key&, const value&);
+  bool insert (const key&, const value&);
   void pop (void) throw (out_of_range);
   const value& lookup (const key&) throw (out_of_range);
   const value& oldest (void) throw (out_of_range);

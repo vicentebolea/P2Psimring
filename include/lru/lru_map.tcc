@@ -14,7 +14,7 @@
  * @param[in]  v  paired with the previous key
  */
 template <class key, class value>
-void lru_map<key, value>::insert (const key& k, const value& v) {
+bool lru_map<key, value>::insert (const key& k, const value& v) {
 
  if (!ht.find(k)) {
   ll.push_back (pair<key, value>(k,v));
@@ -23,13 +23,14 @@ void lru_map<key, value>::insert (const key& k, const value& v) {
   it = --ll.end();
   ht.insert (k, it); // :TRICKY: end() returns the last?
 
-  size++;
+  this->size++;
 
  } else {
   update (k, v);
  }
 
- if (size > max) pop();
+ if (this->size > max) pop();
+	return true;
 }
 
 /** ***************************************************//**
@@ -39,13 +40,13 @@ void lru_map<key, value>::insert (const key& k, const value& v) {
 template <class key, class value>
 void lru_map<key, value>::pop () throw (out_of_range) {
 
-	if (!size)
+	if (!this->size)
 		return;
  key k ((*ll.begin()).first);
  ht.remove (k);
 
  ll.pop_front();
- size--;
+ this->size--;
 }
 
 /** ***************************************************//**
@@ -100,7 +101,7 @@ lru_map<key, value>::update (const key& k, const value& v)
 
  ht.remove (k);         // Delete to the hash table
  ll.erase (it);         // Delete that node in the list
- size--;
+ this->size--;
  insert (k, v);         // Rearrange the list
 }
 

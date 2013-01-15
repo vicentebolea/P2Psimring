@@ -60,7 +60,7 @@
 #define __HASHTABLE_HH_
 
 // Base class
-#include <collection.hh>
+#include <dictionary.hh>
 
 // STL libraries
 #include <list>
@@ -78,7 +78,7 @@ using std::list;
 using std::out_of_range;
 
 template <class key, class value>
-class hashTable: public Collection {
+class hashTable: public dictionary<key, value> {
  typedef pair<key, value> entry;
  public:
   hashTable (size_t);
@@ -105,7 +105,7 @@ class hashTable: public Collection {
   size_t buckets_no;
 
   const static double threshold = 1.5;
-  inline double over_threshold (void) const;
+  inline bool over_threshold (void) const;
 
   inline uint32_t h (const key&, size_t) const;
   void rehash (void);

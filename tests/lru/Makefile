@@ -5,7 +5,7 @@ CXX := g++
 CXXFLAGS := -g -Wall $(INCLUDE)
 LDFLAGS := -L./../../lib -lUnitTest++
 
-all:
+all: hashtable lru_map
 
 hashtable: hashtable_test.cc
 	$(CXX) -c $(CXXFLAGS) $^
@@ -16,4 +16,4 @@ lru_map: lru_map_test.cc
 	$(CXX) -o ./$@ lru_map_test.o $(LDFLAGS)
 
 clean:						
-	rm chain_test
+	rm *.o hashtable lru_map
