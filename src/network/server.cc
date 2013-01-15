@@ -4,7 +4,7 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-Server::Server (int port, int nservers) {
+Server::Server (int port, int nservers): address_book(nservers) {
 	try {
 		address_book = new Client_e [nservers];
 		address_book_size = nservers;
@@ -20,7 +20,6 @@ Server::Server (int port, int nservers) {
 
 Server::~Server() {
 	close (sock);
-	delete [] address_book;
 }
 
 /* 
@@ -62,48 +61,58 @@ void Server::connect () throw (Exception) {
 		address_book [i].connect(sock);
 }
 
-/* 
- * NAME:   recieve_packet
- * RETURN: const Packet& 
-	* SHORT:  This method will read the first byte
+/** 
+	* @brief  This method will read the first byte
 	*         of the packet and depend of the type it will
 	*         create a diferent object.
+ * @return Packet ready 
 	*/
 bool Server::recieve (int fd, void* addr, size_t size) {
 	size_t rec_b = 0;
 
-	while (rec_b < size)
-		rec_b += recv (fd, ((uint8_t*)addr + rec_b), size - rec_b, MSG_WAITALL);
+	while (rec_b < size) {
+		rec_b += recv (fd, ((uint8_t*)addr + rec_b),
+    size - rec_b, MSG_WAITALL);
+
 		if (rec_b	== (size_t)-1)
 			return false;
-
+ }
 	return true;
 }
 
-/* 
- * NAME:   recieve_packet
- * RETURN: const Packet& 
-	* SHORT:  This method will read the first byte
+/** 
+	* @brief  This method will get the type of the
+ *         incomming Packet. 
+ * @return Packet.Type
+	*/
+Packet.Type Server::recieve_type (int fd) {
+ Packet tmp;
+ recv (fd, &tmp, sizeof Packet, MSG_BLOCK | MSG_PEEK);
+ return tmp.getType();
+}
+
+/**
+	* @brief  This method will read the first byte
 	*         of the packet and depend of the type it will
 	*         create a diferent object.
+ * @return const Packet& 
 	*/
 const Packet& Server::recieve_packet (int fd) {
-	static Packet tmp (QUIT);
-	recieve (fd, &tmp, sizeof(Packet));
+ static Packet tmp (QUIT);
 
-	switch (tmp.getType()) {
+	switch (recieve_type(fd)) {
 		case QUERY:
-			if (!recieve (fd, &tmp, sizeof(Query)-sizeof(Packet)))
+			if (!recieve (fd, &tmp, sizeof(Query)))
 				throw Exception ("Strange Packet Type");
 			break;
 
 		case STATS:
-			if (!recieve (fd, &tmp, sizeof(Stat)-sizeof(Packet)))
+			if (!recieve (fd, &tmp, sizeof(Stat)))
 				throw Exception ("Strange Packet Type");
 			break;
 
 		case UPDATE:
-			if (!recieve (fd, &tmp, sizeof(Update)-sizeof(Packet)))
+			if (!recieve (fd, &tmp, sizeof(Update)))
 				throw Exception ("Strange Packet Type");
 			break;
 
@@ -117,11 +126,10 @@ const Packet& Server::recieve_packet (int fd) {
 }
 
 /* 
- * NAME:   send_packet
- * RETURN: bool 
-	* SHORT:  This method will read the first byte
+	* @brief  This method will read the first byte
 	*         of the packet and depend of the type it will
 	*         create a diferent object.
+ * @return bool 
 	*/
 bool Server::send_packet (int fd, const Packet& p) {
 	try {

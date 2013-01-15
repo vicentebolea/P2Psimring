@@ -1,3 +1,6 @@
+/**
+ *
+	*/
 #ifndef __SERVER_HH__
 #define __SERVER_HH__
 
@@ -11,20 +14,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <vector>
 
 #include <exception.hh>
-#include <packet/packet.hh>
-#include <packet/query.hh>
-#include <packet/stat.hh>
-#include <packet/update.hh>
-#include <server/client_e.hh>
+#include <packet.hh>
+#include <query.hh>
+#include <stat.hh>
+#include <update.hh>
+#include <client_e.hh>
 
+using std::vector;
 using std::ostream;
 using std::endl;
 
-/*
- *
-	*/
 class Server: public sockaddr_in {
 	public:
 		class Exception: public ::Exception {
@@ -34,9 +36,10 @@ class Server: public sockaddr_in {
 
 	protected:
 		char name [1024];
-		int sock, address_book_size;
-		Client_e* address_book;
+		int sock;
+  vector<address_page> address_book;
 
+  Packet.Type recieve_type (int fd);
 		bool recieve (int fd, void* addr, size_t size);
 		void	bind (int port, int nservers) throw (Exception);
 
@@ -47,6 +50,7 @@ class Server: public sockaddr_in {
 
 		void	connect () throw (Exception);
 
+  Packet.Type getType() const;
 		const Packet& recieve_packet (int fd);
 		bool send_packet (int fd, const Packet& p);
 
