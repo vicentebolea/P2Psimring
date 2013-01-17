@@ -14,16 +14,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <vector>
 
 #include <exception.hh>
-#include <packet.hh>
-#include <query.hh>
-#include <stat.hh>
-#include <update.hh>
-#include <client_e.hh>
+#include <socket_stream.hh>
 
-using std::vector;
 using std::ostream;
 using std::endl;
 
@@ -37,25 +31,15 @@ class Server: public sockaddr_in {
 	protected:
 		char name [1024];
 		int sock;
-  vector<address_page> address_book;
-
-		bool recieve (int fd, void* addr, size_t size);
-		void	bind (int port, int nservers) throw (Exception);
 
 	public:
-
 		Server (int port, int nservers);
 		~Server ();
 
-		void	connect () throw (Exception);
-
-  uint8_t getType() const;
-
-  template <class msg>
-		const msg& recieve_message<msg> (int fd);
-
-  template <class msg>
-		bool send_message<msg> (int fd, const msg& p);
+		void	bind (int port, int nservers) throw (Exception);
+		const socket_stream& connect () throw (Exception);
+  
+  void close();
 
 		friend ostream& operator<< (ostream& in, const Server& s) {
 			in << "[Server: "<< s.name << "]";

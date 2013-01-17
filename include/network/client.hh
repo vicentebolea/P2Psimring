@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <socket_stream.hh>
 
 struct Client: public sockaddr_in {
 	struct hostent* host;	
@@ -17,7 +18,7 @@ struct Client: public sockaddr_in {
 	Client(char* ip, int port); 
 	~Client();
 
-	bool connect();
+	const socket_stream& connect();
 };
 
 #endif
