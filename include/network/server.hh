@@ -39,7 +39,6 @@ class Server: public sockaddr_in {
 		int sock;
   vector<address_page> address_book;
 
-  Packet.Type recieve_type (int fd);
 		bool recieve (int fd, void* addr, size_t size);
 		void	bind (int port, int nservers) throw (Exception);
 
@@ -50,9 +49,13 @@ class Server: public sockaddr_in {
 
 		void	connect () throw (Exception);
 
-  Packet.Type getType() const;
-		const Packet& recieve_packet (int fd);
-		bool send_packet (int fd, const Packet& p);
+  uint8_t getType() const;
+
+  template <class msg>
+		const msg& recieve_message<msg> (int fd);
+
+  template <class msg>
+		bool send_message<msg> (int fd, const msg& p);
 
 		friend ostream& operator<< (ostream& in, const Server& s) {
 			in << "[Server: "<< s.name << "]";

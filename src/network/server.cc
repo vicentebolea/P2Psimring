@@ -68,96 +68,99 @@ void Server::connect () throw (Exception) {
  * @return Packet ready 
 	*/
 bool Server::recieve (int fd, void* addr, size_t size) {
-	size_t rec_b = 0;
+ size_t rec_b = 0;
 
-	while (rec_b < size) {
-		rec_b += recv (fd, ((uint8_t*)addr + rec_b),
-    size - rec_b, MSG_WAITALL);
-
-		if (rec_b	== (size_t)-1)
-			return false;
+ rec_b = recv (fd, addr, size, MSG_WAITALL);
+ if (rec_b	== (size_t)-1) {
+  switch (errno) {
+   case EAGAIN:
+   case EBADF:
+   case EIO: 
+   case EFBIG: break;
+  }
+  return false;
  }
-	return true;
+ return true;
 }
 
 /** 
-	* @brief  This method will get the type of the
+ * @brief  This method will get the type of the
  *         incomming Packet. 
  * @return Packet.Type
-	*/
-Packet.Type Server::recieve_type (int fd) {
- Packet tmp;
- recv (fd, &tmp, sizeof Packet, MSG_BLOCK | MSG_PEEK);
- return tmp.getType();
+ */
+uint8_t Server::getType (int fd) {
+ uint8_t tmp
+  recv (fd, &tmp, 1, MSG_BLOCK | MSG_PEEK);
+ return tmp;
 }
 
 /**
-	* @brief  This method will read the first byte
-	*         of the packet and depend of the type it will
-	*         create a diferent object.
+ * @brief  This method will read the first byte
+ *         of the packet and depend of the type it will
+ *         create a diferent object.
  * @return const Packet& 
-	*/
+ */
 const Packet& Server::recieve_packet (int fd) {
  static Packet tmp (QUIT);
 
-	switch (recieve_type(fd)) {
-		case QUERY:
-			if (!recieve (fd, &tmp, sizeof(Query)))
-				throw Exception ("Strange Packet Type");
-			break;
+ switch (recieve_type(fd)) {
+  case QUERY:
+   if (!recieve (fd, &tmp, sizeof(Query)))
+    throw Exception ("Strange Packet Type");
+   break;
 
-		case STATS:
-			if (!recieve (fd, &tmp, sizeof(Stat)))
-				throw Exception ("Strange Packet Type");
-			break;
+  case STATS:
+   if (!recieve (fd, &tmp, sizeof(Stat)))
+    throw Exception ("Strange Packet Type");
+   break;
 
-		case UPDATE:
-			if (!recieve (fd, &tmp, sizeof(Update)))
-				throw Exception ("Strange Packet Type");
-			break;
+  case UPDATE:
+   if (!recieve (fd, &tmp, sizeof(Update)))
+    throw Exception ("Strange Packet Type");
+   break;
 
-		case INFO: break;
-		case QUIT: break;
+  case INFO: break;
+  case QUIT: break;
 
-		default:
-			throw Exception ("Strange Packet Type");
-	}
-	return tmp;
+  default:
+             throw Exception ("Strange Packet Type");
+ }
+ return tmp;
 }
 
 /* 
-	* @brief  This method will read the first byte
-	*         of the packet and depend of the type it will
-	*         create a diferent object.
+ * @brief  This method will read the first byte
+ *         of the packet and depend of the type it will
+ *         create a diferent object.
  * @return bool 
-	*/
+ */
 bool Server::send_packet (int fd, const Packet& p) {
-	try {
-		switch (p.getType()) {
-			case QUERY:
-				if (send (fd, &p, sizeof(Query), 0) == -1)
-					throw Exception ("problems with send");
-				break;    
+ try {
+  switch (p.getType()) {
+   case QUERY:
+    if (send (fd, &p, sizeof(Query), 0) == -1)
+     throw Exception ("problems with send");
+    break;    
 
-			case STATS:
-				if (send (fd, &p, sizeof(Stat), 0) == -1)
-					throw Exception ("problems with send");
-				break;
+   case STATS:
+    if (send (fd, &p, sizeof(Stat), 0) == -1)
+     throw Exception ("problems with send");
+    break;
 
-				case UPDATE:
-					if (send (fd, &p, sizeof(Update), 0) == -1)
-						throw Exception ("problems with send");
-				break;
+   case UPDATE:
+    if (send (fd, &p, sizeof(Update), 0) == -1)
+     throw Exception ("problems with send");
+    break;
 
-			case INFO: break; 
-			case QUIT: break;
+   case INFO: break; 
+   case QUIT: break;
 
-			default:
-				throw Exception ("Strange Packet Type");
-		}
-	} catch (Exception& e) {
-		cerr << e << endl;		
-		return false;
-	}
-	return true;
+   default:
+              throw Exception ("Strange Packet Type");
+  }
+ } catch (Exception& e) {
+  cerr << e << endl;		
+  return false;
+ }
+ return true;
 }

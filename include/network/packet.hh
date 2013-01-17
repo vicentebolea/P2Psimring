@@ -1,6 +1,3 @@
-#ifndef __PACKET_H_
-#define __PACKET_H_
-
 /**
 	* @class Packet
 	* @name Packet
@@ -11,7 +8,7 @@
 	* @verbatim
  *
 	*	|--------|------------------------------------|
-	*	| 1 Byte |          At most 160 bits          |
+	*	| 1 Byte |          Message                   |
 	*	|--------|------------------------------------|
 	*	|  Type  |      Query / Update / stats        |
 	*	|--------|------------------------------------|
@@ -29,38 +26,44 @@
 	*	This two last types has not class defined since they
 	*	dont need aditional information.
 	*/
+
+#ifndef __PACKET_H_
+#define __PACKET_H_
+
+#include <stddef.h>
+#include <stdint.h>
+#include <inttypes.h>
+
+template <class Message>
 class Packet {
-	public:
-		/** 
-		 * @enum Type	
-			* @brief Differents types which indicate the porpose of
-			* the packet
-			*/
-		enum Type {
-			QUERY  = 000, // 0000
-			UPDATE = 001, // 0001
-			STATS  = 002, // 0010
-			INFO   = 004, // 0100
-			QUIT   = 010  // 1000
-		} __attribute__((packed()));
-
 	protected:
-		Type type; 
+		uint8_t type; 
+  Message message;
 
 	public:
-		Packet (Type t) : type(t) {}
+		Packet (uint8_t t, const Message& m) : type(t), message(m) {}
 		Packet (const Packet& packet) {
 			type = packet.type;
+   message = packet.message;
 		}
 
 		const Packet& operator= (const Packet& packet) {
 			type = packet.type;
+   message = packet.message;
 			return *this;
 		}
 
-		Type getType () const {
+  uint8_t getType () const {
 			return type;
 		}
+
+  const Message& getMessage() {
+   return message;
+  }
+
+  size_t getSize() const {
+   return (sizeof(uint8_t) + sizeof(Message));
+  }
 };
 
 #endif
