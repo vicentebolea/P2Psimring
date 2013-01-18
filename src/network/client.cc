@@ -1,30 +1,19 @@
 #include <client.hh>
-#include <stdio.h>
+
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
 
-Client::Client (char* ip, int port) {
-	//host = gethostbyname (ip);
-//	sin_addr = *((struct in_addr *)host->h_addr);
-
-	sin_family = AF_INET;     
-	sin_port = htons (port);   
-	inet_pton (AF_INET, ip, &sin_addr);
-	bzero (&sin_zero, 8); 
-
-	if ((sock = socket (AF_INET, SOCK_STREAM, 0)) == -1) {
-		perror ("Socket");
-		exit (EXIT_FAILURE);
-	}
+Client::Client (char* ip, int port) : Socket (port) {
+	inet_pton (AF_INET, ip, &addr.sin_addr);
 }
 
-Client::~Client() {
-	close (sock);
-}
+const socket_stream Client::connect (void) {
+	if (::connect (sock, (sockaddr *)this, sizeof(sockaddr)) == -1)
+  throw Exception ("Connect, Socket");
 
-bool Client::connect() {
-	if (::connect (sock, (struct sockaddr *)this,
-	 sizeof(struct sockaddr)) == -1) {
-		perror("Connect error"); return false; }
-	else 
-		return true;
+ return socket_stream (sock);
 }

@@ -1,61 +1,50 @@
-#include <server/server.hh>
+#include <server.hh>
 
-using std::cout;
-using std::cerr;
-using std::endl;
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <unistd.h>
+#include <stdlib.h>
 
-Server::Server (int port, int nservers): address_book(nservers) {
-	try {
-		bind (port, nservers);
+namespace tcp_socket {
 
-	} catch (Exception& e) {
-		cerr << e << endl;
-		cerr << e.backtrace() << endl;
-		close (sock);
-		exit (EXIT_FAILURE);
-	}
-}
+ Server::Server (int port) : Socket (port) {
+  addr.sin_addr.s_addr = INADDR_ANY;
+ }
 
-Server::~Server() {
-	close (sock);
-}
+ /**
+  * @brief  This method will bind the socket to
+  *         a given port and a multiples users
+  *         Also will start to listen for incoming
+  *         connections.
+  */
+ void 
+  Server::bind (int nservers) throw (Exception) 
+  { 
+   if (::bind (sock, (sockaddr *)&addr,
+      sizeof (sockaddr)) ==-1)
+    throw Exception ("unable to bind");
 
-/* 
- * NAME:   recieve_packet
- * RETURN: const Packet& 
-	* SHORT:  This method will read the first byte
-	*         of the packet and depend of the type it will
-	*         create a diferent object.
-	*/
-void Server::bind (int port, int nservers) throw (Server::Exception) { 
-	const int o = 1;
-	if ((sock = socket (AF_INET, SOCK_STREAM, 0)) == -1)
-		throw Exception ("socket function");
+   if (listen (sock, nservers) == -1)
+    throw Exception ("listen");
+  }
 
-	if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &o, 
-    sizeof int) == -1)
-		throw Exception ("setsockopt: SO_REUSEADDR");
+ /**
+  * @brief  This method will read the first byte
+  * @return const Packet& 
+  */
+ const socket_stream
+  Server::connect (void) throw (Exception) 
+  {
+   struct sockaddr_in in;
+   socklen_t len;
 
-	sin_family = AF_INET;
-	sin_port = htons (port);
-	sin_addr.s_addr = INADDR_ANY;
-	bzero (&(sin_zero), 8);
+   len = sizeof (struct sockaddr_in);
+   socket_stream aux (accept (sock, (struct sockaddr*)&in, &len));
 
-	if (::bind (sock, (struct sockaddr *)this,
-     sizeof struct sockaddr) == -1)
-		throw Exception ("unable to bind");
-
-	if (listen (sock, nservers) == -1)
-		throw Exception ("listen");
-
-	gethostname (name, 1023);
-}
-
-/* 
- * NAME:   recieve_packet
- * RETURN: const Packet& 
-	* SHORT:  This method will read the first byte
-	*/
-const socket_stream& Server::connect () throw (Exception) {
-	for (int i = 0; i < nservers; i++);
+   return aux;
+  }
 }

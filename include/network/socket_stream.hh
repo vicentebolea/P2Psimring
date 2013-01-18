@@ -21,57 +21,58 @@
 #include <exception.hh>
 #include <packet.hh>
 
-class socket_stream {
- protected:
-  int sock;
+namespace tcp_socket {
+ class socket_stream {
+  protected:
+   int sock;
 
- public:
-  socket_stream (int);
-  ~socket_stream ();
+  public:
+   socket_stream (int);
+   ~socket_stream ();
 
-  void setBlocking (bool);
-  uint8_t getType() const;
-  void close (void);
+   void setBlocking (bool);
+   uint8_t getType() const;
+   void close (void);
 
-  template <class msg> const msg& recieve (void);
-  template <class msg, int type> bool send (const msg&);
-};
+   template <class msg> const msg& recieve (void);
+   template <class msg, int type> bool send (const msg&);
+ };
 
-/** 
-	* @brief  This method will read the first byte
-	*         of the packet and depend of the type it will
-	*         create a diferent object.
- * @return Packet ready 
-	*/
-template <class msg>
-const msg& socket_stream::recieve (void) {
- static Packet<msg> packet (0, 0);
- int ret = recv (sock, &packet, sizeof packet, MSG_WAITALL);
- if (ret < 0)
-  perror ("HERE");
+ /** 
+  * @brief  This method will read the first byte
+  *         of the packet and depend of the type it will
+  *         create a diferent object.
+  * @return Packet ready 
+  */
+ template <class msg>
+  const msg& socket_stream::recieve (void) {
+   static Packet<msg> packet (0, 0);
+   int ret = recv (sock, &packet, sizeof packet, MSG_WAITALL);
+   if (ret < 0)
+    perror ("HERE");
 
- return packet.getMessage();
-}
-
-/** 
-	* @brief  This method will read the first byte
-	*         of the packet and depend of the type it will
-	*         create a diferent object.
- * @return Packet ready 
-	*/
-template <class msg, int type>
-bool socket_stream::send (const msg& m) {
- Packet<msg> packet (type, m);
-
- int ret = ::send (sock, &packet, sizeof packet, MSG_WAITALL);
- if (ret == -1) {
-  switch (errno) {
-   case EAGAIN: break;
-   default: throw Exception ("send message");
+   return packet.getMessage();
   }
-  return false;
- }
- return true;
-}
 
+ /** 
+  * @brief  This method will read the first byte
+  *         of the packet and depend of the type it will
+  *         create a diferent object.
+  * @return Packet ready 
+  */
+ template <class msg, int type>
+  bool socket_stream::send (const msg& m) {
+   Packet<msg> packet (type, m);
+
+   int ret = ::send (sock, &packet, sizeof packet, MSG_WAITALL);
+   if (ret == -1) {
+    switch (errno) {
+     case EAGAIN: break;
+     default: throw Exception ("send message");
+    }
+    return false;
+   }
+   return true;
+  }
+}
 #endif
