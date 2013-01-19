@@ -7,9 +7,9 @@
 namespace tcp_socket {
  class Client: public Socket {
   public:
-   Client(char* ip, int port); 
+   Client(int, const char*); 
 
-   const socket_stream connect();
+   const socket_stream connect() throw (Exception);
  };
 }
 #endif

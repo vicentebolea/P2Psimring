@@ -14,6 +14,7 @@
 #include <arpa/inet.h>
 
 using namespace std;
+using namespace tcp_socket;
 
 class ss_server {
  public: 

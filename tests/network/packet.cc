@@ -4,6 +4,8 @@
 #include <iostream>
 #include <packet.hh>
 
+using namespace tcp_socket;
+
 SUITE (packet_suite) {
  TEST (constructor) {
   Packet<int> packet (1, 10);

@@ -7,13 +7,17 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 
-Client::Client (char* ip, int port) : Socket (port) {
-	inet_pton (AF_INET, ip, &addr.sin_addr);
-}
+namespace tcp_socket {
+	Client::Client (int port, const char* ip) : Socket (port) {
+		inet_pton (AF_INET, ip, &addr.sin_addr);
+	}
 
-const socket_stream Client::connect (void) {
-	if (::connect (sock, (sockaddr *)this, sizeof(sockaddr)) == -1)
-  throw Exception ("Connect, Socket");
+	const socket_stream 
+	Client::connect (void) throw (Exception) {
+		if (::connect (sock, (sockaddr *)&addr, sizeof(sockaddr))
+			!= 0)
+			throw Exception ("Connect, Socket");
 
- return socket_stream (sock);
+		return socket_stream (sock);
+	}
 }

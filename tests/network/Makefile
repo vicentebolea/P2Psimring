@@ -1,20 +1,35 @@
-INCLUDE := -I./../../include
-INCLUDE += -I./../../include/network
-INCLUDE += -I./../../lib
+INCLUDE  := -I ./../../include
+INCLUDE  += -I ./../../include/network
+INCLUDE  += -I ./../../lib
 
-CXX := g++
+CXX      := g++
 CXXFLAGS := -g -Wall $(INCLUDE)
-LDFLAGS := -L./../../lib -lUnitTest++
+LDFLAGS  := -L ./../../lib -l UnitTest++
+EXE      := server client packet socket_stream
 
-all: packet
+all: $(EXE)
 
 packet: packet.cc
-	$(CXX) -c $(CXXFLAGS) $^
-	$(CXX) -o ./$@ packet.o $(LDFLAGS)
+	$(CXX) -o ./$@ $(CXXFLAGS) $^ $(LDFLAGS)
 
-socket_stream: socket_stream_test.cc
-	$(CXX) -c $(CXXFLAGS) $^ ../../src/network/socket_stream.cc
-	$(CXX) -o ./$@ socket_stream.o socket_stream_test.o $(LDFLAGS)
+socket_stream: socket_stream.cc
+	$(CXX) -o ./$@ $(CXXFLAGS) $^      \
+	../../src/network/socket_stream.cc \
+	$(LDFLAGS)
+
+server: server.cc
+	$(CXX) -o ./$@ $(CXXFLAGS) $^      \
+	../../src/network/server.cc        \
+	../../src/network/socket_stream.cc \
+	../../src/network/packet.cc        \
+	../../src/network/socket.cc
+
+client: client.cc
+	$(CXX) -o ./$@ $(CXXFLAGS) $^      \
+	../../src/network/client.cc        \
+	../../src/network/socket_stream.cc \
+	../../src/network/packet.cc        \
+	../../src/network/socket.cc
 
 clean:
-	-rm *.o packet socket_stream
+	-rm *.o $(EXE)

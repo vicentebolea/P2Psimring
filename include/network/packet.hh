@@ -34,36 +34,45 @@
 #include <stdint.h>
 #include <inttypes.h>
 
-template <class Message>
-class Packet {
-	protected:
-		uint8_t type; 
-  Message message;
+namespace tcp_socket {
+	template <class Message>
+		class Packet {
+			protected:
+				uint8_t type; 
+				Message message;
 
-	public:
-		Packet (uint8_t t, const Message& m) : type(t), message(m) {}
-		Packet (const Packet& packet) {
-			type = packet.type;
-   message = packet.message;
-		}
+			public:
 
-		const Packet& operator= (const Packet& packet) {
-			type = packet.type;
-   message = packet.message;
-			return *this;
-		}
+				//Packet (uint8_t t, const Message& m, size_t n): type(t) {
+				//Message tmp [n];
+				//for (size_t i = 0; i < n; i++)
+				//tmp[i] = m[i];
+				//}
+				Packet (uint8_t t, const Message& m) : type(t), message(m) {}
+				Packet (uint8_t t) : type(t) {}
+				Packet (const Packet& packet) {
+					type = packet.type;
+					message = packet.message;
+				}
 
-  uint8_t getType () const {
-			return type;
-		}
+				const Packet& operator= (const Packet& packet) {
+					type = packet.type;
+					message = packet.message;
+					return *this;
+				}
 
-  const Message& getMessage() {
-   return message;
-  }
+				uint8_t getType () const {
+					return type;
+				}
 
-  size_t getSize() const {
-   return (sizeof(uint8_t) + sizeof(Message));
-  }
-};
+				const Message& getMessage() {
+					return message;
+				}
+
+				size_t getSize() const {
+					return (sizeof(uint8_t) + sizeof(Message));
+				}
+		};
+}
 
 #endif
