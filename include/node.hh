@@ -24,11 +24,8 @@
 
 //Classes
 #include <macros.h>
-#include <server.hh>
-#include <packet/packet.hh>
-#include <packet/query.hh>
-#include <packet/update.hh>
-#include <packet/stat.hh>
+#include <network/server.hh>
+#include <network/client.hh>
 
 //standard libraries
 #include <sys/time.h>
@@ -59,8 +56,10 @@ class Node {
 		pthread_t scheduler;	
 		pthread_t worker;	
 
-		pthread_mutex_t empty_m;
-		pthread_cond_t full_c;
+		pthread_mutex_t lock_scheduler_empty;
+		pthread_mutex_t lock_neighbor_empty;
+		pthread_cond_t cond_scheduler;
+		pthread_cond_t cond_neighbor;
 
 		static bool die_thread;
 
@@ -87,8 +86,8 @@ class Node {
 			static Node singleton ();
 			return singleton;
 		}
-		bool init();	
-		bool process();
+		bool init ();	
+		bool start ();
 
 		friend ostream& operator<< (ostream&, const Node&);
 };
