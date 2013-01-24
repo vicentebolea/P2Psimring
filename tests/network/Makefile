@@ -21,14 +21,12 @@ server: server.cc
 	$(CXX) -o ./$@ $(CXXFLAGS) $^      \
 	../../src/network/server.cc        \
 	../../src/network/socket_stream.cc \
-	../../src/network/packet.cc        \
 	../../src/network/socket.cc
 
 client: client.cc
 	$(CXX) -o ./$@ $(CXXFLAGS) $^      \
 	../../src/network/client.cc        \
 	../../src/network/socket_stream.cc \
-	../../src/network/packet.cc        \
 	../../src/network/socket.cc
 
 clean:

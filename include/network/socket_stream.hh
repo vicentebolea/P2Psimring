@@ -46,7 +46,7 @@ namespace tcp_socket {
   */
  template <class msg>
   const msg& socket_stream::recieve (void) {
-   static Packet<msg> packet (0);
+   static Packet<msg> packet;
    int ret = recv (sock, &packet, sizeof packet, MSG_WAITALL);
    if (ret != sizeof (packet))
     throw Exception ("recieve");
@@ -62,10 +62,8 @@ namespace tcp_socket {
   */
  template <class msg, int type>
   bool socket_stream::send (const msg& m) {
-   Packet<msg> packet (type);
+   Packet<msg> packet (type, m);
 
-   //int ret = ::send (sock, reinterpret_cast<void*> (type),
-			 //sizeof(int), 0);
    int ret = ::send (sock, &packet, sizeof(packet), MSG_WAITALL);
    if (ret == -1) {
     switch (errno) {

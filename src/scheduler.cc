@@ -10,14 +10,21 @@ Scheduler::Scheduler (int argc, char** argv) {
 	pthread_attr_set_detach (&sender_attr, PTHREAD_DETACH_JOINABLE);
 
 	//In case that we want to use the config file
-	if (read_ini_file) {
-		if (opt.not_config_file)
+	if (opt.need_help) {
+		printf ("%s", opt_help); 
+		exit (EXIT_SUCCESS);
+
+	} else if (read_ini_file) {
+		if (!opt.need_config)
 			read_ini.open (default_config_path);
 		else
 			read_ini.open (opt.config_path);
 
-		opt.scheduler_port = read_ini.get_value_of ("scheduler", "scheduler_port");
-		opt.number_nodes = read_ini.get_value_of ("scheduler", "number_nodes");
+		opt.scheduler_port = 
+		 read_ini.get_value_of ("scheduler", "scheduler_port");
+
+		opt.number_nodes = 
+		 read_ini.get_value_of ("scheduler", "number_nodes");
 
 		read_init.close ();
 	}
@@ -44,7 +51,7 @@ bool Scheduler::get_args (int argc, char** argv) {
 				break;
 
 			case 'f': /* Ini config file path */
-			 opt.config_path = strncpy (opt.config_path, optarg, 128);
+			 strncpy (opt.config_path, optarg, 128);
 				opt.config_file = true;
 				break;
 

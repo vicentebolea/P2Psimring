@@ -9,7 +9,6 @@
 #include <exception.hh>
 #include <socket_stream.hh>
 
-using std::ostream;
 using std::string;
 
 namespace tcp_socket {
@@ -22,7 +21,7 @@ namespace tcp_socket {
    };
 
   protected:
-   struct sockaddr_in addr;
+   sockaddr_in addr;
    char name [1024];
    int sock;
 
@@ -36,11 +35,6 @@ namespace tcp_socket {
    void close (void);
 
    const string& toString (void);
-
-   //friend ostream& operator<< (ostream& in, const Socket& s) {
-    //in << (string) s.toString();
-    //return in;
-  // }
  };
 }
 #endif 

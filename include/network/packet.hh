@@ -42,14 +42,10 @@ namespace tcp_socket {
 				Message message;
 
 			public:
-
-				//Packet (uint8_t t, const Message& m, size_t n): type(t) {
-				//Message tmp [n];
-				//for (size_t i = 0; i < n; i++)
-				//tmp[i] = m[i];
-				//}
 				Packet (uint8_t t, const Message& m) : type(t), message(m) {}
 				Packet (uint8_t t) : type(t) {}
+				Packet (void) {}
+
 				Packet (const Packet& packet) {
 					type = packet.type;
 					message = packet.message;
