@@ -21,8 +21,9 @@ int main (){
  s.setUp();
  s.bind();
 	socket_stream ss = s.connect();
-	const message m1 = ss.recieve<message>();
-	cout << m1.msg << endl;
+	const int m1 = ss.recieve<int>();
+	cout << m1 << endl;
+ printf ("%X \n",m1);
 	ss.send<message, 1> (message("Hey man"));
  s.close();
 

@@ -1,6 +1,10 @@
 /**
+ * @namespace  tcp_socket
+ * @class      Server
+ * @brief      Class which wrap server socket BSD
+ *********************************************************			
  *
-	*/
+ */
 #ifndef __SERVER_HH__
 #define __SERVER_HH__
 

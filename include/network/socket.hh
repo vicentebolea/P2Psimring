@@ -1,4 +1,8 @@
 /**
+ * @namespace  tcp_socket
+ * @class      Socket
+ * @brief      Class which wrap BSD sockets
+ *********************************************************			
  *
  */
 #ifndef __SOCKET_HH_

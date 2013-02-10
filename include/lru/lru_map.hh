@@ -1,17 +1,18 @@
-/** ***************************************************//**
+/**
  * @class  lru_map 
  * @brief  Template header for lru_map ADT
  * @see    hashTable <hashtable.hh>
  * @author Vicente Adolfo Bolea Sanchez
  *         <vicente.bolea@gmail.com>,
  *         <vicente@unist.ac.kr>
+ **********************************************************
  *
  * @section DESCRIPTION
  * This is just a sketch for the LRU map class.
  *
  * @subsection TIME COMPLEXITY
-	* Here is described the time complexities of each
-	* functions: 
+ * Here is described the time complexities of each
+ * functions: 
  *  - insert:   O(1) (amortized time)
  *  - lookup:   O(1)
  *  - oldest:   O(1) 
@@ -23,12 +24,12 @@
  * rehash it will take O(n + buckets).
  *
  * @subsection METHODOLOGY
-	* This Lru map is using a hashtable+doublylinkedlist where:
-	*  - The hash table will store a pointer of each element in
-	*    the list.
-	*  - The linkedlist will be use as lru linkedlist with a
-	*    pair of key and value.
-	* 
+ * This Lru map is using a hashtable+doublylinkedlist where:
+ *  - The hash table will store a pointer of each element in
+ *    the list.
+ *  - The linkedlist will be use as lru linkedlist with a
+ *    pair of key and value.
+ * 
  * @subsection TODO
  * Here is the way that I am implementing this LRU:
  *  - The LL will just store the diskpage.

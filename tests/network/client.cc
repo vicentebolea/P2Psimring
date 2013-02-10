@@ -21,7 +21,8 @@ int main (){
  Client c (9998, "127.0.0.1"); 
  c.setUp();
 	socket_stream ss =  c.connect();
-	ss.send<message, 1> (message ("Hey guys"));
+	ss.send<int, 1> (0x00ff);
+	//ss.send<message, 1> (message ("Hey guys"));
 	message m2 = ss.recieve<message>(); 
 	cout << m2.msg << endl;
  c.close();
