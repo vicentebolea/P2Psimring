@@ -2,18 +2,17 @@ INCLUDE := -I./../../include/lru/
 INCLUDE += -I./../../lib
 
 CXX := g++
-CXXFLAGS := -g -Wall $(INCLUDE)
+CXXFLAGS := -g -Wall $(INCLUDE) -std=gnu++98
 LDFLAGS := -L./../../lib -lUnitTest++
 
-all: hashtable lru_map
+SOURCES := hashtable.cc lru_map.cc main.cc
+OBJECTS := $(patsubst %.cc, %.o, $(SOURCES))
 
-hashtable: hashtable_test.cc
-	$(CXX) -c $(CXXFLAGS) $^
-	$(CXX) -o ./$@ hashtable_test.o $(LDFLAGS)
+%.o : %.cc 
+	$(CXX) -c $(CXXFLAGS) $^ 
 
-lru_map: lru_map_test.cc
-	$(CXX) -c $(CXXFLAGS) $^
-	$(CXX) -o ./$@ lru_map_test.o $(LDFLAGS)
+all: $(OBJECTS)
+	$(CXX) -o ./lru_test $^ $(LDFLAGS)
 
 clean:						
-	rm *.o hashtable lru_map
+	rm *.o lru_test

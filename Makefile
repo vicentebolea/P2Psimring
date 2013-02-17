@@ -18,11 +18,16 @@ build: packet lru
 src:
 	$(MAKE) -C $(SRCDIR)
 
-lib: 
-	$(MAKE) -C ./lib 
+depend:
+	if	[ ! -f /usr/lib/libtynixml.* ]; do       \
+		$(MAKE) -C ./lib                           \
+	fi
+	if	[ ! -f /usr/lib/libminIni.* ]; do        \
+		$(MAKE) -C ./lib                           \
+	fi
 
 clean:
-	rm $(BINDIR)/*.o
+	-rm $(BINDIR)/*.o
 
 dist:
 	tar -cvzf unip2p_`date +"%d-%m-%y"`.tar.gz ./*

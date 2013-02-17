@@ -23,18 +23,17 @@ technics.
 
 Structure 
 ---------
- - backup 
- - bin
+ - bin/
  - config.ini
- - docs
- - include
- - lib
+ - docs/
+ - include/
+ - lib/
  - Makefile
  - Makefile.vars
- - readme.html
+ - prototipes/
  - README.md
- - src
- - tests
+ - src/
+ - tests/
 
 7 directories, 5 files
 
@@ -45,9 +44,10 @@ The source code is stored in [github] [gh].
 
 REQUIREMENTS
 ============
- - The source code is coded in *c++99* for linux. 
+ - The source code is coded in *C++98* for linux with GNU
+			extensions, using GCC, e.g., *GNU++98*. 
 
- - You will need in each node and enough big file of garbage
+ - You will need in each node an enough big file of garbage
 			to test the LRU cache throughput. the size of this file
 			should be as big as the domain of the data set.
 
@@ -72,8 +72,8 @@ DATA STRUCTURES
 ===============
 
 Each node has a __LRU cache__ which store the retrieved data
-in the past operations. This __LRU cache__ is implements in
-a way which all the main operations have a __O(1)__ time
+in the previous operations. This __LRU cache__ is implements in
+some way where all the operations have __O(1)__ time
 complexity in the best case.
 
 At the same time each node has two queues used as buffers

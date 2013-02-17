@@ -41,9 +41,9 @@ class Scheduler {
 			Code needed for parsing the command line
 		*****************************************************/
 protect:
-	const char* default_config_path = "config.ini";
+	const char* default_config_path = "./config.ini";
 	const char* optstring = "c:i:n:p:h";
-	const char opt_help[] = 
+	const char* opt_help  = 
   "Usage: scheduler [OPTION]...                         \n"
 	 "-----------------------------------------------------\n" 
 		"Options:                                             \n" 

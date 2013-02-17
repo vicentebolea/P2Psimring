@@ -110,7 +110,3 @@ SUITE (bad_ht_test) {
 			CHECK_THROW (ht.lookup (i), out_of_range);
 	}
 }
-
-int main () {
-	return UnitTest::RunAllTests();
-}

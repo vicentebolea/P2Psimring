@@ -15,6 +15,7 @@ Scheduler::Scheduler (int argc, char** argv) {
 		exit (EXIT_SUCCESS);
 
 	} else if (read_ini_file) {
+
 		if (!opt.need_config)
 			read_ini.open (default_config_path);
 		else

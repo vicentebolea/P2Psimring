@@ -110,7 +110,3 @@ SUITE (lru_map_bad) {
 //
 	//}
 }
-
-int main () {
-	return UnitTest::RunAllTests();
-}
