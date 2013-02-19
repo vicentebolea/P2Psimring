@@ -59,6 +59,7 @@ class lru_map: public dictionary<key, value> {
 
  public:
   lru_map (size_t _max) : max (_max) {}
+	~lru_map () {}
 
   bool insert (const key&, const value&);
   void pop (void) throw (out_of_range);

@@ -28,7 +28,7 @@ hashTable<key, value>::~hashTable () {
 
 /** ***************************************************//**
  * @pre key != NULL and value != NULL
-	* @post buckets[h(key)] == value
+ * @post buckets[h(key)] == value
  */
 template <class key, class value>
 bool
