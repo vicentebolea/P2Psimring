@@ -31,7 +31,7 @@ namespace tcp_socket {
 
   public:
    Socket (int);
-   ~Socket ();
+   virtual ~Socket ();
 
    virtual const socket_stream connect (void) = 0;
 
