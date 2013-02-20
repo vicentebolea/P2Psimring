@@ -7,7 +7,7 @@ CXXFLAGS := -g -Wall $(INCLUDE)
 LDFLAGS  := -L ./../../lib -l UnitTest++
 EXE      := server client packet socket_stream
 
-all: $(EXE)
+all: depend $(EXE) 
 
 packet: packet.cc
 	$(CXX) -o ./$@ $(CXXFLAGS) $^ $(LDFLAGS)
@@ -28,6 +28,11 @@ client: client.cc
 	../../src/network/client.cc        \
 	../../src/network/socket_stream.cc \
 	../../src/network/socket.cc
+
+depend:
+	@if ! [ -a ./../../lib/libUnitTest++.a ] || ! [ -a ./../../lib/minIni.o ]; then \
+		make -C ./../../lib;                                               \
+	fi;
 
 clean:
 	-rm *.o $(EXE)
