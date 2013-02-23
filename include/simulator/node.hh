@@ -33,6 +33,7 @@
 //project's libraries
 #include <network/server.hh>
 #include <network/client.hh>
+
 #include <lru/lru_map.hh>
 
 //UNIX libraries
@@ -77,7 +78,6 @@ class Node {
   pthread_cond_t cond_neighbor;
 
   static bool die_thread;
-
   static uint32_t queryRecieves; 
   static uint32_t queryProcessed;
   static uint64_t hitCount;
@@ -87,33 +87,45 @@ class Node {
   static uint64_t inshiftedQueries;
   static uint64_t outShiftedQueries;
 
+
   //Threads functions
   static void* thread_scheduler_fun (void*);
   static void* thread_neighbor_fun (void*);
   static void* thread_worker_fun (void*);
 
   //Query functions
-//  void prepare_query (void);
+  //  void prepare_query (void);
   bool process_query (Query*);
-  bool swift_query (Query*);
-  bool scheduler_query (Query*);
+  //  bool swift_query (Query*);
+  // bool scheduler_query (Query*);
 
   void shutdown (void);
-
- protected:
-  Node ();
-  ~Node ();
 
  public:
   static Node& getInstance (void) {
    static Node singleton;
    return singleton;
   }
+  Node ();
+  ~Node ();
 
   bool init (void);
   bool start (void);
 
   friend ostream& operator<< (ostream&, const Node&);
 };
+
+bool Node::die_thread;
+uint32_t Node::queryRecieves; 
+uint32_t Node::queryProcessed;
+uint64_t Node::hitCount;
+uint64_t Node::missCount;
+uint64_t Node::TotalExecTime; 
+uint64_t Node::TotalWaitTime;
+uint64_t Node::inshiftedQueries;
+uint64_t Node::outShiftedQueries;
+
+queue<Query> Node::buffer_local;
+queue<Query*> Node::buffer_neighbor;
 
 #endif

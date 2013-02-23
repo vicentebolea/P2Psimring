@@ -8,18 +8,18 @@
 #include <node.hh>
 
 TEST (ctor) {
-	Node& n = Node.getInstance();
+	Node n;// = Node.getInstance();
 }
 
 //TEST (dtor) {
 //}
 
 TEST (init) {
-	Node& n = Node.getInstance();
+	Node n;// = Node.getInstance();
 	n.init();
 }
 
 TEST (start) {
-	Node& n = Node.getInstance();
+	Node n;// = Node.getInstance();
 	n.start();
 }

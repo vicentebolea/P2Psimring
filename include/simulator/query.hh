@@ -4,15 +4,16 @@
 #include <sys/time.h>
 #include <stdint.h>
 #include <inttypes.h>
+#include <stdlib.h>
 
 
 //! :TODO:
-enum query_type {
-	GET    = 0x0,
-	READ   = 0x1,
-	WRITE  = 0x2,
-	REMOVE = 0x4
-};
+//enum query_type {
+	//GET    = 0x0,
+	//READ   = 0x1,
+	//WRITE  = 0x2,
+	//REMOVE = 0x4
+//};
 
 class Query {
 	private:

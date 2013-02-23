@@ -6,26 +6,29 @@ INCLUDE += -I ./../../include/lru
 
 CXX := g++
 CXXFLAGS := -g -Wall $(INCLUDE) -std=gnu++98 
-LDFLAGS := -L ./../../lib -L ./../../src/simulator 
-LDFLAGS += -l UnitTest++ -l pthread
+LDFLAGS := -L ./../../lib -L ./../../src/network 
+LDFLAGS += -l UnitTest++ -l pthread -l tcp_sockets 
 
-SOURCES := node.cc
+SOURCES := node.cc main.cc
 OBJECTS := $(patsubst %.cc, %.o, $(SOURCES))
 
 %.o : %.cc 
 	$(CXX) -c $(CXXFLAGS) $^ 
 
-all: depend $(OBJECTS)
-	$(CXX) -o ./lru_test $(OBJECTS) $(LDFLAGS)
+all: depend $(OBJECTS) node_test
+
+node_test:
+	$(CXX) -o ./node_test  $(OBJECTS) ./../../src/simulator/node.o \
+                             ./../../src/simulator/query.o  $(LDFLAGS) \
 
 depend:
 	@if ! [ -a ./../../lib/libUnitTest++.a ] || ! [ -a ./../../lib/minIni.o ]; then \
 		make -C ./../../lib;                                               \
 	fi;
 	
-	@if ! [ -a ./../../src/simulator/node.o ]; then     \
- 		g++ -c $(CXXFLAGS) ./../../src/simulator/node.cc; \
+	@if ! [ -a ./../../src/simulator/node.o ] || ! [ -a ./../../src/simulator/query.o ]; then     \
+ 	make -C ./../../src/simulator; \
 	fi;
 
 clean:						
-	-rm *.o lru_test
+	-rm *.o node_test

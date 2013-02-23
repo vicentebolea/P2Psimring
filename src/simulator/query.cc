@@ -1,10 +1,11 @@
-#include <uniDQP.h>
+#include <query.hh>
 
-Query::Query (const packet& p): packet(p) {
-  gettimeofday(&scheduledDate, NULL);
+static uint64_t timediff (struct timeval *end_time, struct timeval *start_time) {
+	return (end_time->tv_usec + 1000000 * end_time->tv_sec) 
+		- (start_time->tv_usec + 1000000 * start_time->tv_sec);
 }
 
-Query::Query (const Query& that): packet(that) {
+Query::Query (const Query& that) {
   scheduledDate = that.scheduledDate;
   startDate = that.startDate;
   finishedDate = that.finishedDate;

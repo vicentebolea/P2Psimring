@@ -1,14 +1,9 @@
 # Local makefile
 
-SOURCES := $(wildcard *.cc)
-OBJECTS := $(patsubst %.cc, %.o, $(SOURCES))
+all:
+	$(MAKE) -C network
+	$(MAKE) -C simulator
 
-$(OBJECTS) : $(SOURCES)
-
-all: packet lru $(OBJECTS)
-
-packet:
-	$(MAKE) -C $(SRCDIR)/packet
-
-lru:
-	$(MAKE) -C $(SRCDIR)/lru
+clean:
+	$(MAKE) -C network clean
+	$(MAKE) -C simulator clean

@@ -13,7 +13,7 @@ Node::Node() {
  scheduler->setUp();
 
 	//empty = PTHREAD_MUTEX_INTIALIZER;
-	die_thread = false;
+	this->die_thread = false;
 }
 
 Node::~Node() {
@@ -127,7 +127,7 @@ bool Node::process_query (Query* query) {
 }
 
 // ------------------------------------------------------ //
-int main (int argc, char** argv) {
-
- return EXIT_SUCCESS;
-}
+//int main (int argc, char** argv) {
+//
+//return EXIT_SUCCESS;
+//}
