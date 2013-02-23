@@ -1,7 +1,8 @@
 /**
  * @namespace  tcp_socket
  * @class      Socket
- * @brief      Class which wrap BSD sockets
+ * @brief      Class which wrap BSD sockets, should be seen
+ *             as an interface
  *********************************************************			
  *
  */
@@ -10,6 +11,7 @@
 
 #include <iostream>
 #include <string>
+#include <string.h>
 #include <exception.hh>
 #include <socket_stream.hh>
 
@@ -31,6 +33,15 @@ namespace tcp_socket {
 
   public:
    Socket (int);
+   Socket (const Socket& that) { 
+    this->sock = that.sock;
+    memcpy (&this->addr, &that.addr, sizeof (struct sockaddr_in));
+   }
+   const Socket& operator= (const Socket& that) {
+    this->sock = that.sock;
+    memcpy (&this->addr, &that.addr, sizeof (struct sockaddr_in));
+    return *this;
+   }
    virtual ~Socket ();
 
    virtual const socket_stream connect (void) = 0;

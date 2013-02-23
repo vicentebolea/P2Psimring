@@ -18,14 +18,6 @@ build: packet lru
 src:
 	$(MAKE) -C $(SRCDIR)
 
-depend:
-	if	[ ! -f /usr/lib/libtynixml.* ]; do       \
-		$(MAKE) -C ./lib                           \
-	fi
-	if	[ ! -f /usr/lib/libminIni.* ]; do        \
-		$(MAKE) -C ./lib                           \
-	fi
-
 clean:
 	-rm $(BINDIR)/*.o
 

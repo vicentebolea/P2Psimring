@@ -4,7 +4,8 @@
  *         <vicente@unist.ac.kr>
  *
  * @class  dictionary
- * @brief  abstract class for dictionary ADT
+ * @interface dictionary
+ * @brief  abstract class for dictionary ADT (INTERFACE)
  ** ***************************************************//**
  *
  */
@@ -25,7 +26,7 @@ class dictionary {
 
  public:
   dictionary () : size (0) {}
-  virtual ~dictionary () = 0;
+  virtual ~dictionary () {}
 
   virtual bool insert (const key& k, const value& v) = 0;
   //virtual void remove (const key& k) = 0; :TODO:
@@ -35,9 +36,5 @@ class dictionary {
   inline size_t getSize () const { return size; }
   inline bool empty () const { return size == 0 ? true: false; }
 };
-
-//Useless thing
-template <class key, class value>
-dictionary<key, value>::~dictionary() {}
 
 #endif

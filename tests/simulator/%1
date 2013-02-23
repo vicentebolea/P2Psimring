@@ -1,0 +1,20 @@
+./../../src/simulator/node.cc: In static member function 'static void* Node::thread_worker_fun(void*)':
+./../../src/simulator/node.cc:95: error: 'Queue' was not declared in this scope
+./../../src/simulator/node.cc:97: error: 'empty' was not declared in this scope
+./../../src/simulator/node.cc:101: error: cannot convert 'Query' to 'Query*' in initialization
+./../../src/simulator/node.cc:103: error: no matching function for call to 'Node::processQuery(Query*&)'
+./../../include/simulator/node.hh:97: note: candidates are: bool Node::processQuery()
+./../../src/simulator/node.cc:91: warning: unused variable 'node'
+./../../src/simulator/node.cc:93: warning: unused variable 'hitmiss_count'
+./../../src/simulator/node.cc: At global scope:
+./../../src/simulator/node.cc:115: error: prototype for 'bool Node::processQuery(Query*)' does not match any in class 'Node'
+./../../include/simulator/node.hh:97: error: candidate is: bool Node::processQuery()
+./../../src/simulator/node.cc: In member function 'bool Node::processQuery(Query*)':
+./../../src/simulator/node.cc:120: error: 'class lru_map<int, int>' has no member named 'match'
+./../../src/simulator/node.cc:120: error: expected type-specifier before 'packet'
+./../../src/simulator/node.cc:120: error: expected `>' before 'packet'
+./../../src/simulator/node.cc:120: error: expected `(' before 'packet'
+./../../src/simulator/node.cc:120: error: 'packet' was not declared in this scope
+./../../src/simulator/node.cc:120: error: expected primary-expression before '>' token
+./../../src/simulator/node.cc:120: error: 'hitmiss_count' was not declared in this scope
+make: *** [depend] Error 1

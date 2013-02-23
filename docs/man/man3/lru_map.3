@@ -1,18 +1,17 @@
-.TH "lru_map< key, value >" 3 "Mon Jan 14 2013" "p2p-distrubuted" \" -*- nroff -*-
+.TH "lru_map" 3 "21 Feb 2013" "p2p-distrubuted" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-lru_map< key, value > \- 
-.PP
-Template header for \fBlru_map\fP ADT\&.  
+lru_map \- Template header for \fBlru_map\fP ADT.  
 
+.PP
 .SH SYNOPSIS
 .br
 .PP
+\fC#include <lru_map.hh>\fP
 .PP
-\fC#include <lru_map\&.hh>\fP
+Inherits \fBdictionary< key, value >< key, value >\fP.
 .PP
-Inherits \fBCollection\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
@@ -20,17 +19,17 @@ Inherits \fBCollection\fP\&.
 .RI "\fBlru_map\fP (size_t _max)"
 .br
 .ti -1c
-.RI "void \fBinsert\fP (const key &, const value &)"
+.RI "bool \fBinsert\fP (const key &, const value &)"
 .br
-.RI "\fIPush back in the linked list the given value and store the key and the address of that value in the hash table\&. In case that the pair is already in the list it will be moved to the newest position\&. \fP"
+.RI "\fIPush back in the linked list the given value and store the key and the address of that value in the hash table. In case that the pair is already in the list it will be moved to the newest position. \fP"
 .ti -1c
 .RI "void \fBpop\fP (void)  throw (out_of_range)"
 .br
-.RI "\fIRemove the older element of the list and its reference in the hash table\&. \fP"
+.RI "\fIRemove the older element of the list and its reference in the hash table. \fP"
 .ti -1c
 .RI "const value & \fBlookup\fP (const key &)  throw (out_of_range)"
 .br
-.RI "\fIThis method will search the value of the given key\&. If it is found, It will remove the element and push into the last position of the list, e\&.g\&. the newest element\&. \fP"
+.RI "\fIThis method will search the value of the given key. If it is found, It will remove the element and push into the last position of the list, e.g. the newest element. \fP"
 .ti -1c
 .RI "const value & \fBoldest\fP (void)  throw (out_of_range)"
 .br
@@ -55,22 +54,18 @@ Inherits \fBCollection\fP\&.
 .RI "list< pair< key, value > > \fBll\fP"
 .br
 .ti -1c
-.RI "\fBhashTable\fP< key, typename list
-.br
-< pair< key, value >
-.br
- >::iterator > \fBht\fP"
+.RI "\fBhashTable\fP< key, typename list< pair< key, value > >::iterator > \fBht\fP"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
 
-.SS "template<class key, class value>class lru_map< key, value >"
-Template header for \fBlru_map\fP ADT\&. 
+.SS "template<class key, class value> class lru_map< key, value >"
+Template header for \fBlru_map\fP ADT. 
 
 \fBSee also:\fP
 .RS 4
-\fBhashTable\fP <\fBhashtable\&.hh\fP> 
+\fBhashTable\fP <\fBhashtable.hh\fP> 
 .RE
 .PP
 \fBAuthor:\fP
@@ -80,7 +75,7 @@ Vicente Adolfo Bolea Sanchez <vicente.bolea@gmail.com>, <vicente@unist.ac.kr>
 .PP
 .SH "DESCRIPTION"
 .PP
-This is just a sketch for the LRU map class\&.
+This is just a sketch for the LRU map class.
 .SS "COMPLEXITY"
 Here is described the time complexities of each functions:
 .IP "\(bu" 2
@@ -95,29 +90,32 @@ newest: O(1)
 pop: O(1)
 .PP
 .PP
-These complexities will be in the best case since the hash table will may rehash sometimes and in each rehash it will take O(n + buckets)\&.
+These complexities will be in the best case since the hash table will may rehash sometimes and in each rehash it will take O(n + buckets).
 .SS "METHODOLOGY"
 This Lru map is using a hashtable+doublylinkedlist where:
 .IP "\(bu" 2
-The hash table will store a pointer of each element in the list\&.
+The hash table will store a pointer of each element in the list.
 .IP "\(bu" 2
-The linkedlist will be use as lru linkedlist with a pair of key and value\&.
+The linkedlist will be use as lru linkedlist with a pair of key and value.
 .PP
 .SS "TODO"
 Here is the way that I am implementing this LRU:
 .IP "\(bu" 2
-The LL will just store the diskpage\&.
+The LL will just store the diskpage.
 .PP
 .PP
 .IP "\(bu" 2
-The hash table given a key (wish in this experiment will be a set of number) will store pointers to each node of the LL\&. 
+The hash table given a key (wish in this experiment will be a set of number) will store pointers to each node of the LL. 
 .PP
 
+.PP
 .SH "Member Function Documentation"
 .PP 
-.SS "template<class key , class value > void \fBlru_map\fP< key, value >::\fBinsert\fP (const key &k, const value &v)"
+.SS "template<class key, class value> bool \fBlru_map\fP< key, value >::insert (const key & k, const value & v)\fC [virtual]\fP"
 .PP
-Push back in the linked list the given value and store the key and the address of that value in the hash table\&. In case that the pair is already in the list it will be moved to the newest position\&. \fBParameters:\fP
+Push back in the linked list the given value and store the key and the address of that value in the hash table. In case that the pair is already in the list it will be moved to the newest position. 
+.PP
+\fBParameters:\fP
 .RS 4
 \fIk\fP value 
 .br
@@ -125,9 +123,13 @@ Push back in the linked list the given value and store the key and the address o
 .RE
 .PP
 
-.SS "template<class key , class value > const value & \fBlru_map\fP< key, value >::\fBlookup\fP (const key &k)  throw (out_of_range)"
 .PP
-This method will search the value of the given key\&. If it is found, It will remove the element and push into the last position of the list, e\&.g\&. the newest element\&. \fBParameters:\fP
+Implements \fBdictionary< key, value >\fP.
+.SS "template<class key, class value> const value & \fBlru_map\fP< key, value >::lookup (const key & k)  throw (out_of_range)\fC [virtual]\fP"
+.PP
+This method will search the value of the given key. If it is found, It will remove the element and push into the last position of the list, e.g. the newest element. 
+.PP
+\fBParameters:\fP
 .RS 4
 \fIk\fP key 
 .RE
@@ -138,19 +140,27 @@ tmp value paired with the given key
 .RE
 .PP
 
-.SS "template<class key , class value > const value & \fBlru_map\fP< key, value >::\fBnewest\fP (void)  throw (out_of_range)"\fBReturns:\fP
+.PP
+Implements \fBdictionary< key, value >\fP.
+.SS "template<class key, class value> const value & \fBlru_map\fP< key, value >::newest (void)  throw (out_of_range)"
+.PP
+\fBReturns:\fP
 .RS 4
 The oldest element of the LRU_map 
 .RE
 .PP
 
-.SS "template<class key , class value > const value & \fBlru_map\fP< key, value >::\fBoldest\fP (void)  throw (out_of_range)"\fBReturns:\fP
+.SS "template<class key, class value> const value & \fBlru_map\fP< key, value >::oldest (void)  throw (out_of_range)"
+.PP
+\fBReturns:\fP
 .RS 4
 The oldest element of the LRU_map 
 .RE
 .PP
 
-.SS "template<class key , class value > void \fBlru_map\fP< key, value >::\fBupdate\fP (const key &k, const value &v)  throw (out_of_range)\fC [protected]\fP"\fBParameters:\fP
+.SS "template<class key, class value> void \fBlru_map\fP< key, value >::update (const key & k, const value & v)  throw (out_of_range)\fC [protected]\fP"
+.PP
+\fBParameters:\fP
 .RS 4
 \fIk\fP value 
 .br
@@ -161,4 +171,4 @@ The oldest element of the LRU_map
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for p2p-distrubuted from the source code\&.
+Generated automatically by Doxygen for p2p-distrubuted from the source code.

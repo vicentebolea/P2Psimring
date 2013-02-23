@@ -1,30 +1,31 @@
-.TH "dictionary< key, value >" 3 "Mon Jan 14 2013" "p2p-distrubuted" \" -*- nroff -*-
+.TH "dictionary" 3 "21 Feb 2013" "p2p-distrubuted" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-dictionary< key, value > \- 
-.PP
-abstract class for dictionary ADT /**  
+dictionary \- abstract class for dictionary ADT (INTERFACE)  
 
+.PP
 .SH SYNOPSIS
 .br
 .PP
+\fC#include <dictionary.hh>\fP
 .PP
-\fC#include <dictionary\&.hh>\fP
+Inherited by \fBhashTable< key, value >\fP, \fBhashTable< key, typename list< pair< key, value >< key, value > >< pair< key, value > >::iterator >\fP, and \fBlru_map< key, value >\fP.
+.PP
 .SS "Public Member Functions"
 
 .in +1c
 .ti -1c
-.RI "virtual void \fBinsert\fP (const key &k, const value &v)=0"
-.br
-.ti -1c
-.RI "virtual void \fBremove\fP (const key &k)=0"
+.RI "virtual bool \fBinsert\fP (const key &k, const value &v)=0"
 .br
 .ti -1c
 .RI "virtual const value & \fBlookup\fP (const key &k)=0  throw (out_of_range)"
 .br
 .ti -1c
-.RI "size_t \fBsize\fP ()"
+.RI "size_t \fBgetSize\fP () const "
+.br
+.ti -1c
+.RI "bool \fBempty\fP () const "
 .br
 .in -1c
 .SS "Protected Attributes"
@@ -37,8 +38,8 @@ abstract class for dictionary ADT /**
 .SH "Detailed Description"
 .PP 
 
-.SS "template<class key, class value>class dictionary< key, value >"
-abstract class for dictionary ADT /** 
+.SS "template<class key, class value> interface dictionary< key, value >"
+abstract class for dictionary ADT (INTERFACE) 
 
 \fBAuthor:\fP
 .RS 4
@@ -46,7 +47,9 @@ Vicente Adolfo Bolea Sanchez <vicente.bolea@gmail.com>, <vicente@unist.ac.kr>
 .RE
 .PP
 
+.PP
+
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for p2p-distrubuted from the source code\&.
+Generated automatically by Doxygen for p2p-distrubuted from the source code.
