@@ -1,5 +1,4 @@
 #include <exception>
-#include <hashtable.hh>
 #include <iostream>
 #include <stdint.h>
 #include <inttypes.h>
@@ -19,7 +18,7 @@ TEST (init) {
 	n.init();
 }
 
-TEST (start) {
-	Node n;// = Node.getInstance();
-	n.start();
-}
+//TEST (start) {
+	//Node n;// = Node.getInstance();
+	//n.start();
+//}

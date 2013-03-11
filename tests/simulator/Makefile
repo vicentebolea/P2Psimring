@@ -15,11 +15,13 @@ OBJECTS := $(patsubst %.cc, %.o, $(SOURCES))
 %.o : %.cc 
 	$(CXX) -c $(CXXFLAGS) $^ 
 
-all: depend $(OBJECTS) node_test
+all: clean depend $(OBJECTS) node_test
 
 node_test:
-	$(CXX) -o ./node_test  $(OBJECTS) ./../../src/simulator/node.o \
-                             ./../../src/simulator/query.o  $(LDFLAGS) \
+	$(CXX) -o ./node_test $(OBJECTS) \
+           ./../../src/simulator/node.o      \
+           ./../../src/simulator/query.o     \
+           $(LDFLAGS)
 
 depend:
 	@if ! [ -a ./../../lib/libUnitTest++.a ] || ! [ -a ./../../lib/minIni.o ]; then \
@@ -32,3 +34,4 @@ depend:
 
 clean:						
 	-rm *.o node_test
+	make -C ./../../src/simulator clean

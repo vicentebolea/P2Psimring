@@ -1,7 +1,46 @@
 #include <node.hh>
 
-using namespace std;
-using namespace tcp_socket;
+// ------------------------------------------------------ //
+//        STATIC MEMBER VARIABLES                         //
+// ------------------------------------------------------ //
+
+Server* Node::attributes;
+Client* Node::scheduler;
+Client* Node::neighbor;
+
+lru_map<int, int>* Node::cache;
+queue<Query> Node::buffer_local;
+queue<Query*> Node::buffer_neighbor;
+
+bool Node::die_thread;
+uint32_t Node::queryRecieves; 
+uint32_t Node::queryProcessed;
+uint64_t Node::hitCount;
+uint64_t Node::missCount;
+uint64_t Node::TotalExecTime; 
+uint64_t Node::TotalWaitTime;
+uint64_t Node::inshiftedQueries;
+uint64_t Node::outShiftedQueries;
+
+int Node::bound_lower;
+int Node::bound_upper;
+
+struct timeval Node::time_start;
+struct timeval Node::time_end;
+
+pthread_t Node::thread_neighbor;
+pthread_t Node::thread_scheduler;
+pthread_t Node::thread_worker;
+
+pthread_mutex_t Node::lock_scheduler_empty;
+pthread_mutex_t Node::lock_neighbor_empty;
+
+pthread_cond_t Node::Node::cond_scheduler;
+pthread_cond_t Node::cond_neighbor;
+
+// ------------------------------------------------------ //
+//               MEMBER METHODS                           //
+// ------------------------------------------------------ //
 
 Node::Node() {
 	attributes = new Server (PORT);
@@ -11,9 +50,13 @@ Node::Node() {
  attributes->bind();
  
  scheduler->setUp();
+ 
+ Node::cache = new lru_map<int, int> (10000);
+	Node::die_thread = false;
 
-	//empty = PTHREAD_MUTEX_INTIALIZER;
-	this->die_thread = false;
+#ifdef DEBUG
+ printf ("Done initialization\n");
+#endif
 }
 
 Node::~Node() {
@@ -21,12 +64,20 @@ Node::~Node() {
 }
 
 void Node::shutdown() {
+#ifdef DEBUG
+ printf ("Starting destructor\n");
+#endif
+
 	pthread_mutex_unlock (&lock_scheduler_empty);	
 	pthread_mutex_unlock (&lock_neighbor_empty);	
 
 	delete attributes;
 	delete scheduler;
 	delete neighbor;
+ delete cache;
+#ifdef DEBUG
+ printf ("FINISH\n");
+#endif
 }
 
 bool Node::init () {
@@ -55,7 +106,9 @@ bool Node::start () {
 
 //ToDo
 void* Node::thread_neighbor_fun (void* args) {
- return NULL; }
+ return NULL; 
+}
+
 // ------------------------------------------------------ //
 //              RECIEVING QUERIES SIDE                    //
 // ------------------------------------------------------ //
@@ -70,7 +123,7 @@ void* Node::thread_scheduler_fun (void* args) {
     case QUERY: node->buffer_local.push (ss.recieve<Query>());  break;
     case INFO:  /*node->inform_scheduler();*/                   break;
     case QUIT:  node->shutdown();                               break;
-    default:    throw Exception ("Unknown message");
+    default:    throw Exception ("Unknown message" + ss.getType());
    }
   } catch (Exception& e) {
    //Some routine to reset sockets and inform 

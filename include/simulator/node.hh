@@ -19,12 +19,12 @@
  *    100e    100e    100e    100e    100e
  * @endverbatim
  */
+#pragma once
+#ifndef __NODE_H_
+#define __NODE_H_
 
 #define PORT 1234
 #define HOST "locahost"
-
-#ifndef __NODE_H_
-#define __NODE_H_
 
 //Related classes
 #include <messages.hh>
@@ -57,25 +57,13 @@ using std::queue;
 class Node {
  protected:
   //To act as a server
-  Server* attributes;
-  Client* scheduler;
-  Client* neighbor;
+  static Server* attributes;
+  static Client* scheduler;
+  static Client* neighbor;
 
-  static lru_map<int, int> cache;
+  static lru_map<int, int>* cache;
   static queue<Query> buffer_local;
   static queue<Query*> buffer_neighbor;
-
-  int bound_lower, bound_upper;
-  struct timeval time_start, time_end;
-
-  pthread_t thread_neighbor;
-  pthread_t thread_scheduler;
-  pthread_t thread_worker;
-
-  pthread_mutex_t lock_scheduler_empty;
-  pthread_mutex_t lock_neighbor_empty;
-  pthread_cond_t cond_scheduler;
-  pthread_cond_t cond_neighbor;
 
   static bool die_thread;
   static uint32_t queryRecieves; 
@@ -87,6 +75,17 @@ class Node {
   static uint64_t inshiftedQueries;
   static uint64_t outShiftedQueries;
 
+  static int bound_lower, bound_upper;
+  static struct timeval time_start, time_end;
+
+  static pthread_t thread_neighbor;
+  static pthread_t thread_scheduler;
+  static pthread_t thread_worker;
+
+  static pthread_mutex_t lock_scheduler_empty;
+  static pthread_mutex_t lock_neighbor_empty;
+  static pthread_cond_t cond_scheduler;
+  static pthread_cond_t cond_neighbor;
 
   //Threads functions
   static void* thread_scheduler_fun (void*);
@@ -114,18 +113,5 @@ class Node {
 
   friend ostream& operator<< (ostream&, const Node&);
 };
-
-bool Node::die_thread;
-uint32_t Node::queryRecieves; 
-uint32_t Node::queryProcessed;
-uint64_t Node::hitCount;
-uint64_t Node::missCount;
-uint64_t Node::TotalExecTime; 
-uint64_t Node::TotalWaitTime;
-uint64_t Node::inshiftedQueries;
-uint64_t Node::outShiftedQueries;
-
-queue<Query> Node::buffer_local;
-queue<Query*> Node::buffer_neighbor;
 
 #endif

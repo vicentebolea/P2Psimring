@@ -1,5 +1,5 @@
-#ifndef __QUERY_H_
-#define __QUERY_H_
+#ifndef __QUERY_HH_
+#define __QUERY_HH_
 
 #include <sys/time.h>
 #include <stdint.h>
