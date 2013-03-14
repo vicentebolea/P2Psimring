@@ -47,7 +47,7 @@ class Exception: public exception {
 		}
 
 		void extra_information (const char* in) {
-			char tmp [128], hostname[64];
+			char tmp [128], hostname [64]; 
 
 			gethostname (hostname, 64);
 			snprintf (tmp, 128, "[ERRNO: %i] [STR: %s]"

@@ -4,8 +4,8 @@ INCLUDE += -I ./../../include/simulator
 INCLUDE += -I ./../../include/network
 INCLUDE += -I ./../../include/lru
 
-CXX := g++
-CXXFLAGS := -g -Wall $(INCLUDE) -std=gnu++98 
+CXX := g++ -std=gnu++98
+CXXFLAGS := -g -Wall $(INCLUDE)  
 LDFLAGS := -L ./../../lib -L ./../../src/network 
 LDFLAGS += -l UnitTest++ -l pthread -l tcp_sockets 
 

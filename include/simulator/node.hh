@@ -56,7 +56,7 @@ using std::queue;
 
 class Node {
  protected:
-  //To act as a server
+  //---------- static variables ----------//
   static Server* attributes;
   static Client* scheduler;
   static Client* neighbor;
@@ -87,24 +87,23 @@ class Node {
   static pthread_cond_t cond_scheduler;
   static pthread_cond_t cond_neighbor;
 
-  //Threads functions
+  //---------- thread functions ----------//
   static void* thread_scheduler_fun (void*);
   static void* thread_neighbor_fun (void*);
   static void* thread_worker_fun (void*);
 
-  //Query functions
-  //  void prepare_query (void);
-  bool process_query (Query*);
-  //  bool swift_query (Query*);
-  // bool scheduler_query (Query*);
+  //---------- Query functions ----------//
+//void query_prepare   (Query*);
+  bool query_process   (Query*);
+//bool query_shift     (Query*);
+//bool query_scheduler (Query*);
 
   void shutdown (void);
 
+  Node (const Node&);
+  const Node& operator= (const Node&);
+
  public:
-  static Node& getInstance (void) {
-   static Node singleton;
-   return singleton;
-  }
   Node ();
   ~Node ();
 

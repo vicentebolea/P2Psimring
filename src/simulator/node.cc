@@ -1,12 +1,16 @@
 #include <node.hh>
 
+using std::cout;
+using std::cerr;
+using std::endl;
+
 // ------------------------------------------------------ //
 //        STATIC MEMBER VARIABLES                         //
 // ------------------------------------------------------ //
 
-Server* Node::attributes;
-Client* Node::scheduler;
-Client* Node::neighbor;
+Server* Node::attributes;              //! Read from the neighbor
+Client* Node::scheduler;               //! comm with the scheduler
+Client* Node::neighbor;                //! shift queries
 
 lru_map<int, int>* Node::cache;
 queue<Query> Node::buffer_local;
@@ -63,6 +67,27 @@ Node::~Node() {
  shutdown();
 }
 
+bool Node::init () {
+ try { 
+  if (0 != pthread_mutex_lock (&lock_scheduler_empty))
+   throw Exception ("Pthread_mutex");
+
+  if (0 != pthread_mutex_lock (&lock_neighbor_empty))
+   throw Exception ("Pthread_mutex");
+
+  scheduler->connect();
+
+ } catch (Socket::Exception& e) {
+  cerr << e << endl << e.backtrace() << endl;
+  return false;
+
+ } catch (Exception& e) {
+  cerr << e << endl; 
+  return false;
+ }
+ return true;
+}
+
 void Node::shutdown() {
 #ifdef DEBUG
  printf ("Starting destructor\n");
@@ -75,17 +100,10 @@ void Node::shutdown() {
 	delete scheduler;
 	delete neighbor;
  delete cache;
+
 #ifdef DEBUG
  printf ("FINISH\n");
 #endif
-}
-
-bool Node::init () {
-	pthread_mutex_lock (&lock_scheduler_empty);	
-	pthread_mutex_lock (&lock_neighbor_empty);	
-
-	scheduler->connect();
- return true;
 }
 
 bool Node::start () {
@@ -101,11 +119,12 @@ bool Node::start () {
 }
 
 // ------------------------------------------------------ //
-//                                                        //
+//              SHIFTING QUERIES SIDE                     //
 // ------------------------------------------------------ //
 
 //ToDo
 void* Node::thread_neighbor_fun (void* args) {
+ pthread_exit (EXIT_SUCCESS);
  return NULL; 
 }
 
@@ -114,6 +133,7 @@ void* Node::thread_neighbor_fun (void* args) {
 // ------------------------------------------------------ //
 
 void* Node::thread_scheduler_fun (void* args) { 
+ pthread_exit (EXIT_SUCCESS);
  Node* node = static_cast<Node*> (args);
 
  socket_stream ss = node->scheduler->connect();
@@ -143,6 +163,7 @@ void* Node::thread_scheduler_fun (void* args) {
 // ------------------------------------------------------ //
 
 void* Node::thread_worker_fun (void* args) {
+ pthread_exit (EXIT_SUCCESS);
  Node* node = static_cast<Node*> (args);
 
  while (node->die_thread != true || node->buffer_local.empty() != true) {
@@ -153,7 +174,7 @@ void* Node::thread_worker_fun (void* args) {
 
   Query* query = &node->buffer_local.front ();
 
-  if (!node->process_query (query)) {
+  if (!node->query_process (query)) {
    node->buffer_neighbor.push (query);
    node->buffer_local.pop ();  
 
@@ -165,7 +186,7 @@ void* Node::thread_worker_fun (void* args) {
  pthread_exit (EXIT_SUCCESS);
 }
 
-bool Node::process_query (Query* query) {
+bool Node::query_process (Query* query) {
  assert (query != NULL);
 
  bool result;

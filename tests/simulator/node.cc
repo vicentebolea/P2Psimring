@@ -7,18 +7,16 @@
 #include <node.hh>
 
 TEST (ctor) {
-	Node n;// = Node.getInstance();
+	Node n;
 }
 
-//TEST (dtor) {
-//}
-
 TEST (init) {
-	Node n;// = Node.getInstance();
+	Node n;
 	n.init();
 }
 
-//TEST (start) {
-	//Node n;// = Node.getInstance();
-	//n.start();
-//}
+TEST (start) {
+	Node n;
+	n.init();
+	n.start();
+}
