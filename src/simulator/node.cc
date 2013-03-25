@@ -133,14 +133,17 @@ void* Node::thread_neighbor_fun (void* args) {
 // ------------------------------------------------------ //
 
 void* Node::thread_scheduler_fun (void* args) { 
- pthread_exit (EXIT_SUCCESS);
  Node* node = static_cast<Node*> (args);
+ try { 
+  static socket_stream ss = node->scheduler->connect();
+ } catch (Socket::Exception& e) {
+  cerr << e << endl << e.backtrace() << endl;
+ }
 
- socket_stream ss = node->scheduler->connect();
  while (true) {
   try {
    switch (ss.getType()) {
-    case QUERY: node->buffer_local.push (ss.recieve<Query>());  break;
+//  case QUERY: node->buffer_local.push (ss.recieve<Query>());  break;
     case INFO:  /*node->inform_scheduler();*/                   break;
     case QUIT:  node->shutdown();                               break;
     default:    throw Exception ("Unknown message" + ss.getType());
