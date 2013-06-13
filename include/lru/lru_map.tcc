@@ -98,11 +98,12 @@ lru_map<key, value>::update (const key& k, const value& v)
 {
  // :TRICKY:
  typename list<pair<key, value> >::iterator it = ht.lookup (k);
+ value tmp (v);
 
  ht.remove (k);         // Delete to the hash table
  ll.erase (it);         // Delete that node in the list
  this->size--;
- insert (k, v);         // Rearrange the list
+ insert (k, tmp);       // Rearrange the list
 }
 
 #endif
